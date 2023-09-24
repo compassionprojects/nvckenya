@@ -1,3 +1,12 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/d5ea42ec-3e69-47d2-8f2e-b1a0990899f2/deploy-status)](https://app.netlify.com/sites/nvckenya/deploys)
+
+# NVC Kenya Website
+
+Deployed using netlify and created with startbootstrap coming-soon theme.
+
+---
+
+
 # [Start Bootstrap - Coming Soon](https://startbootstrap.com/theme/coming-soon/)
 
 [Coming Soon](https://startbootstrap.com/theme/coming-soon/) is a simple coming soon theme for [Bootstrap](https://getbootstrap.com/) created by [Start Bootstrap](https://startbootstrap.com/). This theme features a background video with a mobile background image fallback.
