@@ -28,5 +28,13 @@ module.exports = {
       },
       __key: 'images',
     },
+    {
+      resolve: 'gatsby-plugin-sass',
+      options: {
+        sassOptions: {
+          precision: 6,
+        },
+      },
+    },
   ],
 };
