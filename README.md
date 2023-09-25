@@ -2,7 +2,7 @@
 
 # NVC Kenya Website
 
-Developed using gatsby and netlifycms.
+Developed using [gatsby](https://www.gatsbyjs.com/) and [staticcms](https://www.staticcms.org/).
 
 ---
 
