@@ -48,140 +48,6 @@ type BooleanQueryOperatorInput = {
   readonly nin: InputMaybe<ReadonlyArray<InputMaybe<Scalars['Boolean']>>>;
 };
 
-type ContentYaml = Node & {
-  readonly children: ReadonlyArray<Node>;
-  readonly contact_email: Maybe<Scalars['String']>;
-  readonly id: Scalars['ID'];
-  readonly internal: Internal;
-  readonly intro: Maybe<Scalars['String']>;
-  readonly parent: Maybe<Node>;
-  readonly title: Maybe<Scalars['String']>;
-  readonly trainers: Maybe<Scalars['String']>;
-};
-
-type ContentYamlConnection = {
-  readonly distinct: ReadonlyArray<Scalars['String']>;
-  readonly edges: ReadonlyArray<ContentYamlEdge>;
-  readonly group: ReadonlyArray<ContentYamlGroupConnection>;
-  readonly max: Maybe<Scalars['Float']>;
-  readonly min: Maybe<Scalars['Float']>;
-  readonly nodes: ReadonlyArray<ContentYaml>;
-  readonly pageInfo: PageInfo;
-  readonly sum: Maybe<Scalars['Float']>;
-  readonly totalCount: Scalars['Int'];
-};
-
-
-type ContentYamlConnection_distinctArgs = {
-  field: ContentYamlFieldSelector;
-};
-
-
-type ContentYamlConnection_groupArgs = {
-  field: ContentYamlFieldSelector;
-  limit: InputMaybe<Scalars['Int']>;
-  skip: InputMaybe<Scalars['Int']>;
-};
-
-
-type ContentYamlConnection_maxArgs = {
-  field: ContentYamlFieldSelector;
-};
-
-
-type ContentYamlConnection_minArgs = {
-  field: ContentYamlFieldSelector;
-};
-
-
-type ContentYamlConnection_sumArgs = {
-  field: ContentYamlFieldSelector;
-};
-
-type ContentYamlEdge = {
-  readonly next: Maybe<ContentYaml>;
-  readonly node: ContentYaml;
-  readonly previous: Maybe<ContentYaml>;
-};
-
-type ContentYamlFieldSelector = {
-  readonly children: InputMaybe<NodeFieldSelector>;
-  readonly contact_email: InputMaybe<FieldSelectorEnum>;
-  readonly id: InputMaybe<FieldSelectorEnum>;
-  readonly internal: InputMaybe<InternalFieldSelector>;
-  readonly intro: InputMaybe<FieldSelectorEnum>;
-  readonly parent: InputMaybe<NodeFieldSelector>;
-  readonly title: InputMaybe<FieldSelectorEnum>;
-  readonly trainers: InputMaybe<FieldSelectorEnum>;
-};
-
-type ContentYamlFilterInput = {
-  readonly children: InputMaybe<NodeFilterListInput>;
-  readonly contact_email: InputMaybe<StringQueryOperatorInput>;
-  readonly id: InputMaybe<StringQueryOperatorInput>;
-  readonly internal: InputMaybe<InternalFilterInput>;
-  readonly intro: InputMaybe<StringQueryOperatorInput>;
-  readonly parent: InputMaybe<NodeFilterInput>;
-  readonly title: InputMaybe<StringQueryOperatorInput>;
-  readonly trainers: InputMaybe<StringQueryOperatorInput>;
-};
-
-type ContentYamlFilterListInput = {
-  readonly elemMatch: InputMaybe<ContentYamlFilterInput>;
-};
-
-type ContentYamlGroupConnection = {
-  readonly distinct: ReadonlyArray<Scalars['String']>;
-  readonly edges: ReadonlyArray<ContentYamlEdge>;
-  readonly field: Scalars['String'];
-  readonly fieldValue: Maybe<Scalars['String']>;
-  readonly group: ReadonlyArray<ContentYamlGroupConnection>;
-  readonly max: Maybe<Scalars['Float']>;
-  readonly min: Maybe<Scalars['Float']>;
-  readonly nodes: ReadonlyArray<ContentYaml>;
-  readonly pageInfo: PageInfo;
-  readonly sum: Maybe<Scalars['Float']>;
-  readonly totalCount: Scalars['Int'];
-};
-
-
-type ContentYamlGroupConnection_distinctArgs = {
-  field: ContentYamlFieldSelector;
-};
-
-
-type ContentYamlGroupConnection_groupArgs = {
-  field: ContentYamlFieldSelector;
-  limit: InputMaybe<Scalars['Int']>;
-  skip: InputMaybe<Scalars['Int']>;
-};
-
-
-type ContentYamlGroupConnection_maxArgs = {
-  field: ContentYamlFieldSelector;
-};
-
-
-type ContentYamlGroupConnection_minArgs = {
-  field: ContentYamlFieldSelector;
-};
-
-
-type ContentYamlGroupConnection_sumArgs = {
-  field: ContentYamlFieldSelector;
-};
-
-type ContentYamlSortInput = {
-  readonly children: InputMaybe<NodeSortInput>;
-  readonly contact_email: InputMaybe<SortOrderEnum>;
-  readonly id: InputMaybe<SortOrderEnum>;
-  readonly internal: InputMaybe<InternalSortInput>;
-  readonly intro: InputMaybe<SortOrderEnum>;
-  readonly parent: InputMaybe<NodeSortInput>;
-  readonly title: InputMaybe<SortOrderEnum>;
-  readonly trainers: InputMaybe<SortOrderEnum>;
-};
-
 type DateQueryOperatorInput = {
   readonly eq: InputMaybe<Scalars['Date']>;
   readonly gt: InputMaybe<Scalars['Date']>;
@@ -512,15 +378,11 @@ type File = Node & {
   readonly blksize: Maybe<Scalars['Int']>;
   readonly blocks: Maybe<Scalars['Int']>;
   readonly changeTime: Scalars['Date'];
-  /** Returns the first child node of type ContentYaml or null if there are no children of given type on this node */
-  readonly childContentYaml: Maybe<ContentYaml>;
   /** Returns the first child node of type ImageSharp or null if there are no children of given type on this node */
   readonly childImageSharp: Maybe<ImageSharp>;
   /** Returns the first child node of type RetreatsYaml or null if there are no children of given type on this node */
   readonly childRetreatsYaml: Maybe<RetreatsYaml>;
   readonly children: ReadonlyArray<Node>;
-  /** Returns all children nodes filtered by type ContentYaml */
-  readonly childrenContentYaml: Maybe<ReadonlyArray<Maybe<ContentYaml>>>;
   /** Returns all children nodes filtered by type ImageSharp */
   readonly childrenImageSharp: Maybe<ReadonlyArray<Maybe<ImageSharp>>>;
   /** Returns all children nodes filtered by type RetreatsYaml */
@@ -667,11 +529,9 @@ type FileFieldSelector = {
   readonly blksize: InputMaybe<FieldSelectorEnum>;
   readonly blocks: InputMaybe<FieldSelectorEnum>;
   readonly changeTime: InputMaybe<FieldSelectorEnum>;
-  readonly childContentYaml: InputMaybe<ContentYamlFieldSelector>;
   readonly childImageSharp: InputMaybe<ImageSharpFieldSelector>;
   readonly childRetreatsYaml: InputMaybe<RetreatsYamlFieldSelector>;
   readonly children: InputMaybe<NodeFieldSelector>;
-  readonly childrenContentYaml: InputMaybe<ContentYamlFieldSelector>;
   readonly childrenImageSharp: InputMaybe<ImageSharpFieldSelector>;
   readonly childrenRetreatsYaml: InputMaybe<RetreatsYamlFieldSelector>;
   readonly ctime: InputMaybe<FieldSelectorEnum>;
@@ -714,11 +574,9 @@ type FileFilterInput = {
   readonly blksize: InputMaybe<IntQueryOperatorInput>;
   readonly blocks: InputMaybe<IntQueryOperatorInput>;
   readonly changeTime: InputMaybe<DateQueryOperatorInput>;
-  readonly childContentYaml: InputMaybe<ContentYamlFilterInput>;
   readonly childImageSharp: InputMaybe<ImageSharpFilterInput>;
   readonly childRetreatsYaml: InputMaybe<RetreatsYamlFilterInput>;
   readonly children: InputMaybe<NodeFilterListInput>;
-  readonly childrenContentYaml: InputMaybe<ContentYamlFilterListInput>;
   readonly childrenImageSharp: InputMaybe<ImageSharpFilterListInput>;
   readonly childrenRetreatsYaml: InputMaybe<RetreatsYamlFilterListInput>;
   readonly ctime: InputMaybe<DateQueryOperatorInput>;
@@ -802,11 +660,9 @@ type FileSortInput = {
   readonly blksize: InputMaybe<SortOrderEnum>;
   readonly blocks: InputMaybe<SortOrderEnum>;
   readonly changeTime: InputMaybe<SortOrderEnum>;
-  readonly childContentYaml: InputMaybe<ContentYamlSortInput>;
   readonly childImageSharp: InputMaybe<ImageSharpSortInput>;
   readonly childRetreatsYaml: InputMaybe<RetreatsYamlSortInput>;
   readonly children: InputMaybe<NodeSortInput>;
-  readonly childrenContentYaml: InputMaybe<ContentYamlSortInput>;
   readonly childrenImageSharp: InputMaybe<ImageSharpSortInput>;
   readonly childrenRetreatsYaml: InputMaybe<RetreatsYamlSortInput>;
   readonly ctime: InputMaybe<SortOrderEnum>;
@@ -1458,7 +1314,6 @@ type PotraceTurnPolicy =
   | 'white';
 
 type Query = {
-  readonly allContentYaml: ContentYamlConnection;
   readonly allDirectory: DirectoryConnection;
   readonly allFile: FileConnection;
   readonly allImageSharp: ImageSharpConnection;
@@ -1468,7 +1323,6 @@ type Query = {
   readonly allSiteFunction: SiteFunctionConnection;
   readonly allSitePage: SitePageConnection;
   readonly allSitePlugin: SitePluginConnection;
-  readonly contentYaml: Maybe<ContentYaml>;
   readonly directory: Maybe<Directory>;
   readonly file: Maybe<File>;
   readonly imageSharp: Maybe<ImageSharp>;
@@ -1478,14 +1332,6 @@ type Query = {
   readonly siteFunction: Maybe<SiteFunction>;
   readonly sitePage: Maybe<SitePage>;
   readonly sitePlugin: Maybe<SitePlugin>;
-};
-
-
-type Query_allContentYamlArgs = {
-  filter: InputMaybe<ContentYamlFilterInput>;
-  limit: InputMaybe<Scalars['Int']>;
-  skip: InputMaybe<Scalars['Int']>;
-  sort: InputMaybe<ReadonlyArray<InputMaybe<ContentYamlSortInput>>>;
 };
 
 
@@ -1561,18 +1407,6 @@ type Query_allSitePluginArgs = {
 };
 
 
-type Query_contentYamlArgs = {
-  children: InputMaybe<NodeFilterListInput>;
-  contact_email: InputMaybe<StringQueryOperatorInput>;
-  id: InputMaybe<StringQueryOperatorInput>;
-  internal: InputMaybe<InternalFilterInput>;
-  intro: InputMaybe<StringQueryOperatorInput>;
-  parent: InputMaybe<NodeFilterInput>;
-  title: InputMaybe<StringQueryOperatorInput>;
-  trainers: InputMaybe<StringQueryOperatorInput>;
-};
-
-
 type Query_directoryArgs = {
   absolutePath: InputMaybe<StringQueryOperatorInput>;
   accessTime: InputMaybe<DateQueryOperatorInput>;
@@ -1624,11 +1458,9 @@ type Query_fileArgs = {
   blksize: InputMaybe<IntQueryOperatorInput>;
   blocks: InputMaybe<IntQueryOperatorInput>;
   changeTime: InputMaybe<DateQueryOperatorInput>;
-  childContentYaml: InputMaybe<ContentYamlFilterInput>;
   childImageSharp: InputMaybe<ImageSharpFilterInput>;
   childRetreatsYaml: InputMaybe<RetreatsYamlFilterInput>;
   children: InputMaybe<NodeFilterListInput>;
-  childrenContentYaml: InputMaybe<ContentYamlFilterListInput>;
   childrenImageSharp: InputMaybe<ImageSharpFilterListInput>;
   childrenRetreatsYaml: InputMaybe<RetreatsYamlFilterListInput>;
   ctime: InputMaybe<DateQueryOperatorInput>;
