@@ -4,8 +4,9 @@
 module.exports = {
   siteMetadata: {
     title: 'NVC Kenya',
-    siteUrl: 'https://www.yourdomain.tld',
+    siteUrl: 'https://nvckenya.org',
   },
+  graphqlTypegen: true,
   plugins: [
     'gatsby-plugin-static-cms',
     'gatsby-plugin-styled-components',
@@ -27,6 +28,13 @@ module.exports = {
         path: './src/images/',
       },
       __key: 'images',
+    },
+    'gatsby-transformer-yaml',
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        path: 'content/',
+      },
     },
     {
       resolve: 'gatsby-plugin-sass',

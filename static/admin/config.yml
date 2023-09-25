@@ -5,15 +5,17 @@ backend:
 media_folder: "static/images/uploads"
 public_folder: "/images/uploads"
 
+# local_backend: true
+
 collections:
-  - name: "faq"
-    label: "FAQ"
+  - name: faq
+    label: FAQ
+    format: yaml
     folder: "content/faq"
     create: true
-    slug: "index"
-    path: "{{title}}/index"
+    path: "{{title}}"
     editor:
-      preview: true
+      preview: false
     fields:
       - label: Title
         name: title
@@ -21,25 +23,33 @@ collections:
       - label: Body
         name: body
         widget: text
-  - name: pages
-    label: Pages
-    files:
-      - name: home
-        label: Home
-        file: content/home.yml
-        media_library:
-          folder_support: true
-        fields:
-          - name: title
-            label: Title
-            widget: string
-          - name: intro
-            label: Intro
-            widget: text
-      - name: settings
-        label: Settings
-        file: content/settings.yml
-        fields:
-          - name: contact_email
-            label: Primary Contact Email
-            widget: string
+
+  - name: retreats
+    label: Retreats
+    format: yaml
+    folder: "content/retreats"
+    create: true
+    path: "{{title}}"
+    editor:
+      preview: false
+    media_library:
+      folder_support: true
+    fields:
+      - name: title
+        label: Title
+        widget: string
+      - name: intro
+        label: Intro
+        widget: text
+      - name: start_date
+        label: Start date
+        widget: datetime
+      - name: end_date
+        label: End date
+        widget: datetime
+      - name: contact_email
+        label: Contact email
+        widget: string
+      - name: hero_image
+        label: Hero Image
+        widget: image
