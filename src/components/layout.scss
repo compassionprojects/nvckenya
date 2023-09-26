@@ -18,3 +18,9 @@ $color-mode-type: media-query;
     width: 0px;
   }
 }
+
+table {
+  @extend .table;
+  @extend .table-responsive;
+  @extend .table-bordered;
+}
