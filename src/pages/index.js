@@ -1,8 +1,9 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import classnames from 'classnames';
 import { marked } from 'marked';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 // get the latest retreat by sorting latest
 export const query = graphql`
@@ -305,17 +306,40 @@ Section.propTypes = {
 };
 
 function Person({ data }) {
+  const [modal, setModal] = useState(false);
+
+  const toggle = () => setModal(!modal);
+
   return (
     <div className="col-lg-3 col-md-4 col-6 text-center" key={data.id}>
       <div className="px-3">
         <img
+          onClick={toggle}
           src={data.photo.publicURL}
-          alt={data.name}
-          className="rounded img-fluid"
+          alt={data.title}
+          className="rounded img-fluid cursor-pointer"
         />
       </div>
-      <div className="fw-bold my-2">{data.title}</div>
+      <div className="fw-bold my-2 cursor-pointer" onClick={toggle}>
+        {data.title}
+      </div>
       <p>{data.role}</p>
+
+      <Modal isOpen={modal} toggle={toggle} centered size="lg">
+        <ModalHeader toggle={toggle}>{data.title}</ModalHeader>
+        <ModalBody>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: marked.parse(data.bio),
+            }}
+          />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={toggle}>
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   );
 }

@@ -24,3 +24,7 @@ table {
   @extend .table-responsive;
   @extend .table-bordered;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
