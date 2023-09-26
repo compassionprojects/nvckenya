@@ -91,8 +91,8 @@ export default function Home({ data }) {
           </div>
         </div>
       </Section>
-      <nav id="navbar" className="sticky-top bg-body">
-        <ul className="nav nav-underline nav-fill">
+      <nav id="navbar" className="sticky-top bg-body navbar-expand">
+        <ul className="nav nav-underline nav-fill flex-nowrap flex-sm-wrap">
           <li className="nav-item pt-3">
             <a className="nav-link pb-3" href="#program">
               Program
