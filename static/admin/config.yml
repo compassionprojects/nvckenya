@@ -8,22 +8,6 @@ public_folder: "/images/uploads"
 # local_backend: true
 
 collections:
-  - name: faq
-    label: FAQ
-    format: yaml
-    folder: "content/faq"
-    create: true
-    path: "{{title}}"
-    editor:
-      preview: false
-    fields:
-      - label: Title
-        name: title
-        widget: string
-      - label: Body
-        name: body
-        widget: text
-
   - name: retreats
     label: Retreats
     format: yaml
@@ -52,4 +36,83 @@ collections:
         widget: string
       - name: hero_image
         label: Hero Image
+        widget: image
+      - name: program
+        label: Program
+        widget: object
+        required: false
+        fields:
+          - name: introduction
+            label: Introduction
+            widget: text
+          - name: details
+            label: Details
+            widget: text
+          - name: goals
+            label: Goals
+            widget: text
+          - name: pricing
+            label: Pricing
+            widget: markdown
+          - name: cancellation_policy
+            label: Cancellation
+            widget: markdown
+          - name: accommodation_details
+            label: Accommodation details
+            widget: markdown
+          - name: facilities
+            label: Facilities
+            widget: markdown
+          - name: accommodation_photo
+            label: Accommodation photo
+            widget: image
+          - name: location
+            label: Location
+            widget: markdown
+          - name: travel
+            label: Travel
+            widget: markdown
+          - name: trainers
+            label: Trainers
+            widget: relation
+            multiple: true
+            required: false
+            collection: team
+            display_fields:
+              - title
+            search_fields:
+              - title
+            value_field: title
+          - name: organisers
+            label: Organisers
+            widget: relation
+            multiple: true
+            required: false
+            collection: team
+            display_fields:
+              - title
+            search_fields:
+              - title
+            value_field: title
+
+  - name: team
+    label: Team
+    format: yaml
+    folder: "content/team"
+    create: true
+    path: "{{title}}"
+    editor:
+      preview: false
+    fields:
+      - name: title
+        label: Title
+        widget: string
+      - name: role
+        label: Role
+        widget: string
+      - name: bio
+        label: Bio
+        widget: markdown
+      - name: photo
+        label: Photo
         widget: image
