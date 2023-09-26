@@ -68,8 +68,8 @@ export default function Home({ data }) {
   return (
     <>
       <Section center>
-        <h1 className="display-4 fw-bold text-body-emphasis">{title}</h1>
         <div className="col-lg-6 mx-auto">
+          <h1 className="display-4 fw-bold text-body-emphasis">{title}</h1>
           <p className="lead my-4">{intro}</p>
           <div className="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
             <Register />
