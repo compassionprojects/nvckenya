@@ -69,12 +69,8 @@ export default function Home({ data }) {
         <div className="col-lg-6 mx-auto">
           <p className="lead my-4">{intro}</p>
           <div className="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
-            <a
-              href="#registrations"
-              className="btn btn-primary btn-lg px-4 me-sm-3">
-              Register
-            </a>
-            <a href="#program" className="btn btn-link">
+            <Register />
+            <a href="#program" className="btn btn-link btn-lg">
               Learn more
             </a>
           </div>
@@ -162,6 +158,9 @@ export default function Home({ data }) {
               }}
             />
           </div>
+          <div className="text-center mt-5 mb-4">
+            <Register />
+          </div>
         </Section>
 
         {/* Pricing */}
@@ -171,6 +170,9 @@ export default function Home({ data }) {
             className="col-lg-6 mx-auto my-3"
             dangerouslySetInnerHTML={{ __html: marked.parse(program.pricing) }}
           />
+          <div className="text-center mt-5 mb-4">
+            <Register />
+          </div>
         </Section>
 
         {/* Cancellations */}
@@ -184,6 +186,9 @@ export default function Home({ data }) {
               __html: marked.parse(program.cancellation_policy),
             }}
           />
+          <div className="text-center mt-5 mb-4">
+            <Register />
+          </div>
         </Section>
 
         {/* Accommodation */}
@@ -221,6 +226,9 @@ export default function Home({ data }) {
               }}
             />
           </div>
+          <div className="text-center mt-5 mb-4">
+            <Register />
+          </div>
         </Section>
 
         {/* Team */}
@@ -241,6 +249,9 @@ export default function Home({ data }) {
                 <Person key={organiser.id} data={organiser} />
               ))}
             </div>
+          </div>
+          <div className="text-center mt-5 mb-4">
+            <Register />
           </div>
         </Section>
 
@@ -312,3 +323,11 @@ function Person({ data }) {
 Person.propTypes = {
   data: PropTypes.object,
 };
+
+function Register() {
+  return (
+    <a href="#registrations" className="btn btn-primary btn-lg">
+      Register
+    </a>
+  );
+}
