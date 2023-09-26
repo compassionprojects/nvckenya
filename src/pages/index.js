@@ -57,7 +57,6 @@ export const query = graphql`
 `;
 
 export default function Home({ data }) {
-  console.log(marked);
   // display the latest retreat
   const { title, intro, contact_email, hero_image, program } =
     data.allRetreatsYaml.edges[0].node;
@@ -67,7 +66,7 @@ export default function Home({ data }) {
 
   return (
     <>
-      <Section center>
+      <div className="px-2 py-5 mt-5 text-center border-bottom">
         <div className="col-lg-6 mx-auto">
           <h1 className="display-4 fw-bold text-body-emphasis">{title}</h1>
           <p className="lead my-4">{intro}</p>
@@ -79,7 +78,7 @@ export default function Home({ data }) {
           </div>
         </div>
         <div style={{ maxHeight: '30vh' }}>
-          <div className="container px-lg-5">
+          <div className="container px-lg-5 mb-4">
             <img
               src={hero_image.publicURL}
               className="img-fluid rounded-3 shadow-lg mb-4"
@@ -89,10 +88,10 @@ export default function Home({ data }) {
             />
           </div>
         </div>
-      </Section>
+      </div>
       <nav
         id="navbar"
-        className="sticky-top bg-body navbar-expand overflow-x-scroll hide-scrollbars">
+        className="sticky-top bg-body navbar-expand overflow-x-scroll hide-scrollbars border-bottom">
         <ul className="nav nav-underline nav-fill flex-nowrap">
           <li className="nav-item pt-3">
             <a className="nav-link pb-3" href="#program">
