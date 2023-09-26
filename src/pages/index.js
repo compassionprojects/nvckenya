@@ -91,8 +91,10 @@ export default function Home({ data }) {
           </div>
         </div>
       </Section>
-      <nav id="navbar" className="sticky-top bg-body navbar-expand">
-        <ul className="nav nav-underline nav-fill flex-nowrap flex-sm-wrap">
+      <nav
+        id="navbar"
+        className="sticky-top bg-body navbar-expand overflow-x-scroll hide-scrollbars">
+        <ul className="nav nav-underline nav-fill flex-nowrap">
           <li className="nav-item pt-3">
             <a className="nav-link pb-3" href="#program">
               Program
@@ -118,7 +120,7 @@ export default function Home({ data }) {
               Team
             </a>
           </li>
-          <li className="nav-item pt-3">
+          <li className="nav-item pt-3 flex-shrink-0">
             <a className="nav-link pb-3" href="#travel">
               Getting there
             </a>
@@ -293,12 +295,14 @@ Section.propTypes = {
 
 function Person({ data }) {
   return (
-    <div className="col-lg-3 text-center" key={data.id}>
-      <img
-        src={data.photo.publicURL}
-        alt={data.name}
-        className="rounded img-fluid"
-      />
+    <div className="col-lg-3 col-md-4 col-6 text-center" key={data.id}>
+      <div className="px-3">
+        <img
+          src={data.photo.publicURL}
+          alt={data.name}
+          className="rounded img-fluid"
+        />
+      </div>
       <div className="fw-bold my-2">{data.title}</div>
       <p>{data.role}</p>
     </div>
