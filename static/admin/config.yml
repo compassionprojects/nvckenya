@@ -10,6 +10,7 @@ public_folder: "/images/uploads"
 collections:
   - name: retreats
     label: Retreats
+    extension: yml
     format: yaml
     folder: "content/retreats"
     create: true
@@ -44,13 +45,13 @@ collections:
         fields:
           - name: introduction
             label: Introduction
-            widget: text
+            widget: markdown
           - name: details
             label: Details
-            widget: text
+            widget: markdown
           - name: goals
             label: Goals
-            widget: text
+            widget: markdown
           - name: pricing
             label: Pricing
             widget: markdown
@@ -97,6 +98,7 @@ collections:
 
   - name: team
     label: Team
+    extension: yml
     format: yaml
     folder: "content/team"
     create: true

@@ -6,7 +6,6 @@ module.exports = {
     title: 'NVC Kenya',
     siteUrl: 'https://nvckenya.org',
   },
-  graphqlTypegen: true,
   plugins: [
     'gatsby-plugin-static-cms',
     'gatsby-plugin-styled-components',
