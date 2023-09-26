@@ -4,6 +4,7 @@ import { graphql } from 'gatsby';
 import classnames from 'classnames';
 import { marked } from 'marked';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import styled from 'styled-components';
 
 // get the latest retreat by sorting latest
 export const query = graphql`
@@ -31,6 +32,7 @@ export const query = graphql`
             }
             facilities
             location
+            trainers_intro
             trainers
             organisers
             travel
@@ -235,6 +237,9 @@ export default function Home({ data }) {
         {/* Team */}
         <Section id="team">
           <h1 className="text-center fw-bold">Team</h1>
+          <div className="col-lg-5 mx-auto text-center mt-3 mb-4">
+            <p>{program.trainers_intro}</p>
+          </div>
           <div className="col-lg-8 mx-auto my-3">
             <div className="row">
               {trainers.map((trainer) => (
@@ -245,7 +250,7 @@ export default function Home({ data }) {
 
           <div className="col-lg-8 mx-auto my-5">
             <h2 className="text-center">Organisers team</h2>
-            <div className="row">
+            <div className="row mt-3">
               {organisers.map((organiser) => (
                 <Person key={organiser.id} data={organiser} />
               ))}
@@ -311,23 +316,20 @@ function Person({ data }) {
   const toggle = () => setModal(!modal);
 
   return (
-    <div className="col-lg-3 col-md-4 col-6 text-center" key={data.id}>
+    <div className="col-xl-3 col-md-4 col-6 my-3 text-center" key={data.id}>
       <div className="px-3">
-        <img
-          onClick={toggle}
-          src={data.photo.publicURL}
-          alt={data.title}
-          className="rounded img-fluid cursor-pointer"
-        />
+        <Avatar bg={data.photo.publicURL} onClick={toggle} />
       </div>
       <div className="fw-bold my-2 cursor-pointer" onClick={toggle}>
         {data.title}
       </div>
-      <p>{data.role}</p>
 
       <Modal isOpen={modal} toggle={toggle} centered size="lg">
         <ModalHeader toggle={toggle}>{data.title}</ModalHeader>
         <ModalBody>
+          <p>
+            <em>{data.role}</em>
+          </p>
           <div
             dangerouslySetInnerHTML={{
               __html: marked.parse(data.bio),
@@ -355,3 +357,14 @@ function Register() {
     </a>
   );
 }
+
+const Avatar = styled.div.attrs({
+  className: 'cursor-pointer rounded-circle mx-auto',
+})`
+  background: url(${(props) => props.bg}) no-repeat;
+  background-position: center center;
+  background-size: cover;
+  resize: both;
+  height: 150px;
+  width: 150px;
+`;

@@ -73,6 +73,9 @@ collections:
           - name: travel
             label: Travel
             widget: markdown
+          - name: trainers_intro
+            label: Trainers intro
+            widget: text
           - name: trainers
             label: Trainers
             widget: relation
