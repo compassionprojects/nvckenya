@@ -132,7 +132,7 @@ program:
 
 
     Before the training, you will have an opportunity to tell us your food preferences. Some of the vegetables will come from the gardens of the Retreat Centre.
-  facilities: >
+  facilities: >+
     All rooms have private bathrooms, and are well furnished, with facilities
     including:
 
@@ -150,7 +150,8 @@ program:
     - Mosquito-net
 
 
-    [Learn more about the Savelberg Retreat Center](https://savelbergretreatcentre.org/)
+
+
   accommodation_photo: venue-image-nvckenyaretreat.jpg
   location: >
     
