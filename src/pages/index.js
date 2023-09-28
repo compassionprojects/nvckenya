@@ -287,7 +287,7 @@ export default function Home({ data }) {
         {/* Registrations */}
         <Section id="registrations">
           <h1 className="text-center fw-bold">Register</h1>
-          <div className="col-lg-6 mx-auto my-3 text-center">
+          <div className="col-lg-6 mx-auto my-3 text-center mb-4">
             <p>
               Registrations will soon be open, in the meantime if you have
               questions, you may contact us
