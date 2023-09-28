@@ -22,6 +22,12 @@ export const query = graphql`
           city
           hero_image {
             publicURL
+            childImageSharp {
+              original {
+                height
+                width
+              }
+            }
           }
           program {
             introduction
@@ -78,6 +84,12 @@ export default function Home({ data }) {
 
   const dates = getDates(start_date, end_date);
 
+  const heroImageWidth = 800;
+  const heroImageHeight =
+    (hero_image.childImageSharp.original.height /
+      hero_image.childImageSharp.original.width) *
+    heroImageWidth;
+
   return (
     <>
       <div className="px-2 py-5 mt-5 text-center border-bottom">
@@ -99,7 +111,8 @@ export default function Home({ data }) {
               src={hero_image.publicURL}
               className="img-fluid rounded-3 shadow-lg mb-4"
               alt="Hero Image"
-              width={800}
+              width={heroImageWidth}
+              height={heroImageHeight}
               loading="lazy"
             />
           </div>
