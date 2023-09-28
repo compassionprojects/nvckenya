@@ -88,7 +88,7 @@ export default function Home({ data }) {
               {dates}, {city}
             </strong>
           </div>
-          <div className="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5 mt-3">
+          <div className="mb-5 mt-3">
             <Register />
           </div>
         </div>
