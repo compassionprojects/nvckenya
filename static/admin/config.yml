@@ -5,7 +5,7 @@ backend:
 media_folder: "static/images/uploads"
 public_folder: "/images/uploads"
 
-local_backend: true
+# local_backend: true
 
 collections:
   - name: retreats
