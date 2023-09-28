@@ -7,6 +7,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import styled from 'styled-components';
 import format from 'date-fns/format';
 import Footer from '../components/Footer';
+import Nav from '../components/Nav';
 
 // get the latest retreat by sorting latest
 export const query = graphql`
@@ -44,6 +45,13 @@ export const query = graphql`
             trainers
             organisers
             travel
+          }
+          seo {
+            seo_title
+            seo_description
+            seo_image {
+              publicURL
+            }
           }
         }
       }
@@ -92,6 +100,7 @@ export default function Home({ data }) {
 
   return (
     <>
+      {/* Hero section */}
       <div className="px-2 py-5 mt-5 text-center border-bottom">
         <div className="col-lg-6 mx-auto">
           <h1 className="display-4 fw-bold text-body-emphasis">{title}</h1>
@@ -118,47 +127,11 @@ export default function Home({ data }) {
           </div>
         </div>
       </div>
-      <nav
-        id="navbar"
-        className="sticky-top bg-body navbar-expand overflow-x-scroll hide-scrollbars border-bottom">
-        <ul className="nav nav-underline nav-fill flex-nowrap">
-          <li className="nav-item pt-3">
-            <a className="nav-link pb-3" href="#program">
-              Program
-            </a>
-          </li>
-          <li className="nav-item pt-3">
-            <a className="nav-link pb-3" href="#team">
-              Team
-            </a>
-          </li>
-          <li className="nav-item pt-3">
-            <a className="nav-link pb-3" href="#pricing">
-              Pricing
-            </a>
-          </li>
-          <li className="nav-item pt-3">
-            <a className="nav-link pb-3" href="#cancellations">
-              Cancellations
-            </a>
-          </li>
-          <li className="nav-item pt-3">
-            <a className="nav-link pb-3" href="#accommodation">
-              Accommodation
-            </a>
-          </li>
-          <li className="nav-item pt-3 flex-shrink-0">
-            <a className="nav-link pb-3" href="#travel">
-              Getting there
-            </a>
-          </li>
-          <li className="nav-item pt-3">
-            <a className="nav-link pb-3" href="#registrations">
-              Registrations
-            </a>
-          </li>
-        </ul>
-      </nav>
+
+      {/* Navigation */}
+      <Nav />
+
+      {/* Page content */}
       <div
         data-bs-spy="scroll"
         data-bs-target="#navbar"
@@ -321,12 +294,32 @@ Home.propTypes = {
   data: PropTypes.object,
 };
 
-export const Head = () => <title>NVC Kenya</title>;
+/* eslint-disable */
+export const Head = ({ data }) => {
+  const { seo, city } = data.allRetreatsYaml.edges[0].node;
+  const { seo_title, seo_description, seo_image } = seo;
 
-function Section({ center, prewrap, ...props }) {
+  return (
+    <>
+      <title>{seo_title}</title>
+      <meta name="description" content={seo_description} />
+      <meta
+        name="keywords"
+        content={`event, retreat, ${city}, kenya, nonviolent communication, nvc, compassion, self care, wellbeing`}
+      />
+
+      <meta property="og:title" content={seo_title} />
+      <meta property="og:description" content={seo_description} />
+      <meta property="og:image" content={seo_image.publicURL} />
+      <meta property="og:url" content="https://nvckenya.org" />
+    </>
+  );
+};
+/* eslint-enable */
+
+function Section({ center, ...props }) {
   return (
     <section
-      style={{ whiteSpace: prewrap ? 'pre-wrap' : 'normal' }}
       className={classnames('px-2 py-5 my-5 border-bottom', {
         'text-center': center,
       })}
@@ -337,7 +330,6 @@ function Section({ center, prewrap, ...props }) {
 
 Section.propTypes = {
   center: PropTypes.bool,
-  prewrap: PropTypes.bool,
 };
 
 function Person({ data }) {

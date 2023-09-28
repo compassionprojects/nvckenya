@@ -5,7 +5,7 @@ backend:
 media_folder: "static/images/uploads"
 public_folder: "/images/uploads"
 
-# local_backend: true
+local_backend: true
 
 collections:
   - name: retreats
@@ -95,6 +95,20 @@ collections:
             search_fields:
               - title
             value_field: user_id
+      - name: seo
+        label: SEO
+        widget: object
+        required: false
+        fields:
+          - name: seo_title
+            label: SEO Title
+            widget: string
+          - name: seo_description
+            label: SEO description
+            widget: text
+          - name: seo_image
+            label: SEO Image
+            widget: image
 
   - name: team
     label: Team
