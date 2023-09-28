@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import { marked } from 'marked';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import styled from 'styled-components';
+import format from 'date-fns/format';
 
 // get the latest retreat by sorting latest
 export const query = graphql`
@@ -17,12 +18,12 @@ export const query = graphql`
           contact_email
           start_date
           end_date
+          city
           hero_image {
             publicURL
           }
           program {
             introduction
-            details
             goals
             pricing
             cancellation_policy
@@ -58,13 +59,23 @@ export const query = graphql`
 
 export default function Home({ data }) {
   // display the latest retreat
-  const { title, intro, contact_email, hero_image, program } =
-    data.allRetreatsYaml.edges[0].node;
+  const {
+    title,
+    intro,
+    contact_email,
+    hero_image,
+    program,
+    start_date,
+    end_date,
+    city,
+  } = data.allRetreatsYaml.edges[0].node;
   const people = data.allTeamYaml.edges.map((e) => e.node);
   const trainers = people.filter((p) => program.trainers.includes(p.user_id));
   const organisers = people.filter((p) =>
     program.organisers.includes(p.user_id),
   );
+
+  const dates = getDates(start_date, end_date);
 
   return (
     <>
@@ -72,11 +83,13 @@ export default function Home({ data }) {
         <div className="col-lg-6 mx-auto">
           <h1 className="display-4 fw-bold text-body-emphasis">{title}</h1>
           <p className="lead my-4">{intro}</p>
-          <div className="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">
+          <div className="my-4">
+            <strong>
+              {dates}, {city}
+            </strong>
+          </div>
+          <div className="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5 mt-3">
             <Register />
-            <a href="#program" className="btn btn-link btn-lg">
-              Learn more
-            </a>
           </div>
         </div>
         <div style={{ maxHeight: '30vh' }}>
@@ -143,14 +156,6 @@ export default function Home({ data }) {
             <div
               dangerouslySetInnerHTML={{
                 __html: marked.parse(program.introduction),
-              }}
-            />
-          </div>
-          <div className="col-lg-6 mx-auto my-5">
-            <h2 className="text-center">Details</h2>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: marked.parse(program.details),
               }}
             />
           </div>
@@ -241,21 +246,25 @@ export default function Home({ data }) {
               loading="lazy"
             />
           </div>
-          <div className="col-lg-6 mx-auto my-5">
-            <h2 className="text-center">Facilities</h2>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: marked.parse(program.facilities),
-              }}
-            />
-          </div>
-          <div className="col-lg-6 mx-auto my-5">
-            <h2 className="text-center">Location</h2>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: marked.parse(program.location),
-              }}
-            />
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-5 col-md-6 mx-md-auto my-5">
+                <h2>Facilities</h2>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: marked.parse(program.facilities),
+                  }}
+                />
+              </div>
+              <div className="col-lg-5 col-md-6 mx-lg-auto my-5">
+                <h2>Location</h2>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: marked.parse(program.location),
+                  }}
+                />
+              </div>
+            </div>
           </div>
           <div className="text-center mt-5 mb-4">
             <Register />
@@ -369,3 +378,21 @@ const Avatar = styled.div.attrs({
   height: 150px;
   width: 150px;
 `;
+
+function getDates(start_date, end_date) {
+  const start_day = format(new Date(start_date), 'do');
+  const start_month = format(new Date(start_date), 'MMMM');
+  const start_year = format(new Date(start_date), 'yyyy');
+
+  const end_day = format(new Date(end_date), 'do');
+  const end_month = format(new Date(end_date), 'MMMM');
+  const end_year = format(new Date(end_date), 'yyyy');
+
+  if (start_month === end_month && start_year === end_year) {
+    return `${start_day} - ${end_day} ${end_month} ${end_year}`;
+  } else if (start_year === end_year && start_month !== end_month) {
+    return `${start_day} ${start_month} - ${end_day} ${end_month} ${end_year}`;
+  } else {
+    return `${start_day} ${start_month} ${start_year} - ${end_day} ${end_month} ${end_year}`;
+  }
+}
