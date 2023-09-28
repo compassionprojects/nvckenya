@@ -6,6 +6,7 @@ import { marked } from 'marked';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import styled from 'styled-components';
 import format from 'date-fns/format';
+import Footer from '../components/Footer';
 
 // get the latest retreat by sorting latest
 export const query = graphql`
@@ -286,12 +287,18 @@ export default function Home({ data }) {
         {/* Registrations */}
         <Section id="registrations">
           <h1 className="text-center fw-bold">Register</h1>
-          <div className="col-lg-6 mx-auto my-3">
+          <div className="col-lg-6 mx-auto my-3 text-center">
+            <p>
+              Registrations will soon be open, in the meantime if you have
+              questions, you may contact us
+            </p>
             <a href={`mailto:${contact_email}`} className="btn btn-secondary">
               Contact us
             </a>
           </div>
         </Section>
+
+        <Footer />
       </div>
     </>
   );
