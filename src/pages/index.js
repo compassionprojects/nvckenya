@@ -101,6 +101,11 @@ export default function Home({ data }) {
             </a>
           </li>
           <li className="nav-item pt-3">
+            <a className="nav-link pb-3" href="#team">
+              Team
+            </a>
+          </li>
+          <li className="nav-item pt-3">
             <a className="nav-link pb-3" href="#pricing">
               Pricing
             </a>
@@ -113,11 +118,6 @@ export default function Home({ data }) {
           <li className="nav-item pt-3">
             <a className="nav-link pb-3" href="#accommodation">
               Accommodation
-            </a>
-          </li>
-          <li className="nav-item pt-3">
-            <a className="nav-link pb-3" href="#team">
-              Team
             </a>
           </li>
           <li className="nav-item pt-3 flex-shrink-0">
@@ -161,6 +161,33 @@ export default function Home({ data }) {
                 __html: marked.parse(program.goals),
               }}
             />
+          </div>
+          <div className="text-center mt-5 mb-4">
+            <Register />
+          </div>
+        </Section>
+
+        {/* Team */}
+        <Section id="team">
+          <h1 className="text-center fw-bold">Team</h1>
+          <div className="col-lg-5 mx-auto text-center mt-3 mb-4">
+            <p>{program.trainers_intro}</p>
+          </div>
+          <div className="col-lg-8 mx-auto my-3">
+            <div className="row">
+              {trainers.map((trainer) => (
+                <Person key={trainer.user_id} data={trainer} />
+              ))}
+            </div>
+          </div>
+
+          <div className="col-lg-8 mx-auto my-5">
+            <h2 className="text-center">Organisers team</h2>
+            <div className="row mt-3">
+              {organisers.map((organiser) => (
+                <Person key={organiser.user_id} data={organiser} />
+              ))}
+            </div>
           </div>
           <div className="text-center mt-5 mb-4">
             <Register />
@@ -229,33 +256,6 @@ export default function Home({ data }) {
                 __html: marked.parse(program.location),
               }}
             />
-          </div>
-          <div className="text-center mt-5 mb-4">
-            <Register />
-          </div>
-        </Section>
-
-        {/* Team */}
-        <Section id="team">
-          <h1 className="text-center fw-bold">Team</h1>
-          <div className="col-lg-5 mx-auto text-center mt-3 mb-4">
-            <p>{program.trainers_intro}</p>
-          </div>
-          <div className="col-lg-8 mx-auto my-3">
-            <div className="row">
-              {trainers.map((trainer) => (
-                <Person key={trainer.user_id} data={trainer} />
-              ))}
-            </div>
-          </div>
-
-          <div className="col-lg-8 mx-auto my-5">
-            <h2 className="text-center">Organisers team</h2>
-            <div className="row mt-3">
-              {organisers.map((organiser) => (
-                <Person key={organiser.user_id} data={organiser} />
-              ))}
-            </div>
           </div>
           <div className="text-center mt-5 mb-4">
             <Register />
