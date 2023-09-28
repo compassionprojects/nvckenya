@@ -46,9 +46,6 @@ collections:
           - name: introduction
             label: Introduction
             widget: markdown
-          - name: details
-            label: Details
-            widget: markdown
           - name: goals
             label: Goals
             widget: markdown
