@@ -43,7 +43,7 @@ export const query = graphql`
     allTeamYaml {
       edges {
         node {
-          id
+          user_id
           title
           bio
           role
@@ -61,8 +61,10 @@ export default function Home({ data }) {
   const { title, intro, contact_email, hero_image, program } =
     data.allRetreatsYaml.edges[0].node;
   const people = data.allTeamYaml.edges.map((e) => e.node);
-  const trainers = people.filter((p) => program.trainers.includes(p.title));
-  const organisers = people.filter((p) => program.organisers.includes(p.title));
+  const trainers = people.filter((p) => program.trainers.includes(p.user_id));
+  const organisers = people.filter((p) =>
+    program.organisers.includes(p.user_id),
+  );
 
   return (
     <>
@@ -242,7 +244,7 @@ export default function Home({ data }) {
           <div className="col-lg-8 mx-auto my-3">
             <div className="row">
               {trainers.map((trainer) => (
-                <Person key={trainer.id} data={trainer} />
+                <Person key={trainer.user_id} data={trainer} />
               ))}
             </div>
           </div>
@@ -251,7 +253,7 @@ export default function Home({ data }) {
             <h2 className="text-center">Organisers team</h2>
             <div className="row mt-3">
               {organisers.map((organiser) => (
-                <Person key={organiser.id} data={organiser} />
+                <Person key={organiser.user_id} data={organiser} />
               ))}
             </div>
           </div>

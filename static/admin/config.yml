@@ -86,7 +86,7 @@ collections:
               - title
             search_fields:
               - title
-            value_field: title
+            value_field: user_id
           - name: organisers
             label: Organisers
             widget: relation
@@ -97,7 +97,7 @@ collections:
               - title
             search_fields:
               - title
-            value_field: title
+            value_field: user_id
 
   - name: team
     label: Team
@@ -115,9 +115,14 @@ collections:
       - name: role
         label: Role
         widget: string
+        required: false
       - name: bio
         label: Bio
         widget: markdown
       - name: photo
         label: Photo
         widget: image
+      - name: user_id
+        label: ID
+        widget: uuid
+        hint: "Do not edit this field"
