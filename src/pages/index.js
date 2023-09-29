@@ -38,6 +38,12 @@ export const query = graphql`
             accommodation_details
             accommodation_photo {
               publicURL
+              childImageSharp {
+                original {
+                  height
+                  width
+                }
+              }
             }
             facilities
             location
@@ -92,11 +98,10 @@ export default function Home({ data }) {
 
   const dates = getDates(start_date, end_date);
 
-  const heroImageWidth = 800;
-  const heroImageHeight =
-    (hero_image.childImageSharp.original.height /
-      hero_image.childImageSharp.original.width) *
-    heroImageWidth;
+  const imageWidth = 800;
+  const imageHeight = ({ childImageSharp }) =>
+    (childImageSharp.original.height / childImageSharp.original.width) *
+    imageWidth;
 
   return (
     <>
@@ -120,8 +125,8 @@ export default function Home({ data }) {
               src={hero_image.publicURL}
               className="img-fluid rounded-3 shadow-lg mb-4"
               alt="Hero Image"
-              width={heroImageWidth}
-              height={heroImageHeight}
+              width={imageWidth}
+              height={imageHeight(hero_image)}
               loading="lazy"
             />
           </div>
@@ -228,8 +233,9 @@ export default function Home({ data }) {
             <img
               src={program.accommodation_photo.publicURL}
               className="img-fluid rounded-3 shadow-lg mb-4 my-3"
-              alt="Hero Image"
-              width={700}
+              alt="Accommodation photo"
+              width={imageWidth}
+              height={imageHeight(program.accommodation_photo)}
               loading="lazy"
             />
           </div>
