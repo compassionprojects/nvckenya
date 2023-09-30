@@ -1,10 +1,9 @@
-/**
- * @type {import('gatsby').GatsbyConfig}
- */
+const siteUrl = 'https://nvckenya.org';
+
 module.exports = {
   siteMetadata: {
     title: 'NVC Kenya',
-    siteUrl: 'https://nvckenya.org',
+    siteUrl,
   },
   plugins: [
     'gatsby-plugin-static-cms',
@@ -14,7 +13,7 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-robots-txt',
       options: {
-        sitemap: '',
+        sitemap: `${siteUrl}/sitemap-index.xml`,
         policy: [{ userAgent: '*', allow: '/' }],
       },
     },
