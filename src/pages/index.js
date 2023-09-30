@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import classnames from 'classnames';
 import { marked } from 'marked';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import styled from 'styled-components';
 import format from 'date-fns/format';
 import Footer from '../components/Footer';
 import Nav from '../components/Nav';
@@ -22,12 +22,8 @@ export const query = graphql`
           end_date
           city
           hero_image {
-            publicURL
             childImageSharp {
-              original {
-                height
-                width
-              }
+              gatsbyImageData(width: 800)
             }
           }
           program {
@@ -37,12 +33,8 @@ export const query = graphql`
             cancellation_policy
             accommodation_details
             accommodation_photo {
-              publicURL
               childImageSharp {
-                original {
-                  height
-                  width
-                }
+                gatsbyImageData(width: 700)
               }
             }
             facilities
@@ -70,9 +62,22 @@ export const query = graphql`
           bio
           role
           photo {
-            publicURL
+            childImageSharp {
+              gatsbyImageData(
+                width: 150
+                height: 150
+                layout: FIXED
+                aspectRatio: 1
+              )
+            }
           }
         }
+      }
+    }
+    site {
+      host
+      siteMetadata {
+        siteUrl
       }
     }
   }
@@ -106,11 +111,6 @@ export default function Home({ data }) {
 
   const dates = getDates(start_date, end_date);
 
-  const imageWidth = 800;
-  const imageHeight = ({ childImageSharp }) =>
-    (childImageSharp.original.height / childImageSharp.original.width) *
-    imageWidth;
-
   return (
     <>
       {/* Hero section */}
@@ -129,13 +129,12 @@ export default function Home({ data }) {
         </div>
         <div style={{ maxHeight: '30vh' }}>
           <div className="container px-lg-5 mb-4">
-            <img
-              src={hero_image.publicURL}
-              className="img-fluid rounded-3 shadow-lg mb-4"
+            <GatsbyImage
+              image={getImage(hero_image)}
+              imgClassName="img-fluid rounded-3"
+              className="mb-4 shadow-lg"
               alt="The NVC community of Kenya standing in a group"
-              width={imageWidth}
-              height={imageHeight(hero_image)}
-              loading="lazy"
+              loading="eager"
             />
           </div>
         </div>
@@ -266,13 +265,11 @@ export default function Home({ data }) {
             />
           </div>
           <div className="container px-lg-5 text-center">
-            <img
-              src={program.accommodation_photo.publicURL}
-              className="img-fluid rounded-3 shadow-lg mb-4 my-3"
-              alt="Accommodation photo"
-              width={imageWidth}
-              height={imageHeight(program.accommodation_photo)}
-              loading="lazy"
+            <GatsbyImage
+              image={getImage(program.accommodation_photo)}
+              imgClassName="img-fluid rounded-3"
+              className="my-4 shadow-lg"
+              alt="The NVC community of Kenya standing in a group"
             />
           </div>
           <div className="container">
@@ -355,7 +352,7 @@ export const Head = ({ data }) => {
       <meta property="og:title" content={seo_title} />
       <meta property="og:description" content={seo_description} />
       <meta property="og:image" content={seo_image.publicURL} />
-      <meta property="og:url" content="https://nvckenya.org" />
+      <meta property="og:url" content={data.site.siteMetadata.siteUrl} />
     </>
   );
 };
@@ -378,9 +375,14 @@ Section.propTypes = {
 
 function Person({ data, onClick }) {
   return (
-    <div className="col-xl-3 col-md-4 col-6 my-3 text-center" key={data.id}>
+    <div className="col-xl-3 col-md-4 col-6 my-3 text-center">
       <div className="px-3">
-        <Avatar bg={data.photo.publicURL} onClick={onClick} alt={data.title} />
+        <GatsbyImage
+          image={getImage(data.photo)}
+          alt={data.title}
+          imgClassName="img-fluid"
+          className="mx-auto rounded-circle"
+        />
       </div>
       <div className="fw-bold my-2 cursor-pointer" onClick={onClick}>
         {data.title}
@@ -401,19 +403,6 @@ function Register() {
     </a>
   );
 }
-
-// transparent dot 1x1 pixel
-const Avatar = styled.img.attrs({
-  src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdjYGRgZAAAAAsAA8cA2jkAAAAASUVORK5CYII=',
-  className: 'cursor-pointer rounded-circle mx-auto',
-})`
-  background: url(${(props) => props.bg}) no-repeat;
-  background-position: center center;
-  background-size: cover;
-  resize: both;
-  height: 150px;
-  width: 150px;
-`;
 
 function getDates(start_date, end_date) {
   const start_day = format(new Date(start_date), 'do');
