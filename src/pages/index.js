@@ -132,7 +132,7 @@ export default function Home({ data }) {
             <img
               src={hero_image.publicURL}
               className="img-fluid rounded-3 shadow-lg mb-4"
-              alt="Hero Image"
+              alt="The NVC community of Kenya standing in a group"
               width={imageWidth}
               height={imageHeight(hero_image)}
               loading="lazy"
@@ -343,6 +343,8 @@ export const Head = ({ data }) => {
 
   return (
     <>
+      <html lang="en" />
+      <body className="nvckenya" />
       <title>{seo_title}</title>
       <meta name="description" content={seo_description} />
       <meta
@@ -378,7 +380,7 @@ function Person({ data, onClick }) {
   return (
     <div className="col-xl-3 col-md-4 col-6 my-3 text-center" key={data.id}>
       <div className="px-3">
-        <Avatar bg={data.photo.publicURL} onClick={onClick} />
+        <Avatar bg={data.photo.publicURL} onClick={onClick} alt={data.title} />
       </div>
       <div className="fw-bold my-2 cursor-pointer" onClick={onClick}>
         {data.title}
@@ -400,7 +402,9 @@ function Register() {
   );
 }
 
-const Avatar = styled.div.attrs({
+// transparent dot 1x1 pixel
+const Avatar = styled.img.attrs({
+  src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdjYGRgZAAAAAsAA8cA2jkAAAAASUVORK5CYII=',
   className: 'cursor-pointer rounded-circle mx-auto',
 })`
   background: url(${(props) => props.bg}) no-repeat;
