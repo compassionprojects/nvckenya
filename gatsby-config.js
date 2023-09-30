@@ -10,13 +10,7 @@ module.exports = {
     'gatsby-plugin-styled-components',
     'gatsby-plugin-image',
     'gatsby-plugin-sitemap',
-    {
-      resolve: 'gatsby-plugin-robots-txt',
-      options: {
-        sitemap: `${siteUrl}/sitemap-index.xml`,
-        policy: [{ userAgent: '*', allow: '/' }],
-      },
-    },
+    'gatsby-plugin-robots-txt',
     'gatsby-plugin-netlify-identity-widget',
     {
       resolve: 'gatsby-plugin-manifest',
