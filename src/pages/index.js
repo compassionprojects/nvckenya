@@ -63,12 +63,7 @@ export const query = graphql`
           role
           photo {
             childImageSharp {
-              gatsbyImageData(
-                width: 150
-                height: 150
-                layout: FIXED
-                aspectRatio: 1
-              )
+              gatsbyImageData(width: 150, height: 150, layout: FIXED)
             }
           }
         }
@@ -132,7 +127,7 @@ export default function Home({ data }) {
             <GatsbyImage
               image={getImage(hero_image)}
               imgClassName="img-fluid rounded-3"
-              className="mb-4 shadow-lg"
+              className="mb-4 shadow-lg rounded-3"
               alt="The NVC community of Kenya standing in a group"
               loading="eager"
             />
@@ -268,7 +263,7 @@ export default function Home({ data }) {
             <GatsbyImage
               image={getImage(program.accommodation_photo)}
               imgClassName="img-fluid rounded-3"
-              className="my-4 shadow-lg"
+              className="my-4 shadow-lg rounded-3"
               alt="The NVC community of Kenya standing in a group"
             />
           </div>
