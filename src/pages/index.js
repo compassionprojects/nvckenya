@@ -96,6 +96,14 @@ export default function Home({ data }) {
     program.organisers.includes(p.user_id),
   );
 
+  const [person, setPerson] = useState({});
+  const [modal, setModal] = useState(false);
+  const toggle = () => setModal(!modal);
+  const onPersonClick = (p) => () => {
+    toggle();
+    setPerson(p);
+  };
+
   const dates = getDates(start_date, end_date);
 
   const imageWidth = 800;
@@ -136,6 +144,26 @@ export default function Home({ data }) {
       {/* Navigation */}
       <Nav />
 
+      {/* Modal window */}
+      <Modal isOpen={modal} toggle={toggle} centered size="lg">
+        <ModalHeader toggle={toggle}>{person.title}</ModalHeader>
+        <ModalBody>
+          <p>
+            <em>{person.role}</em>
+          </p>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: marked.parse(person.bio || ''),
+            }}
+          />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="secondary" onClick={toggle}>
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
+
       {/* Page content */}
       <div
         data-bs-spy="scroll"
@@ -173,7 +201,11 @@ export default function Home({ data }) {
           <div className="col-lg-8 mx-auto my-3">
             <div className="row">
               {trainers.map((trainer) => (
-                <Person key={trainer.user_id} data={trainer} />
+                <Person
+                  key={trainer.user_id}
+                  data={trainer}
+                  onClick={onPersonClick(trainer)}
+                />
               ))}
             </div>
           </div>
@@ -182,7 +214,11 @@ export default function Home({ data }) {
             <h2 className="text-center">Organisers team</h2>
             <div className="row mt-3">
               {organisers.map((organiser) => (
-                <Person key={organiser.user_id} data={organiser} />
+                <Person
+                  key={organiser.user_id}
+                  data={organiser}
+                  onClick={onPersonClick(organiser)}
+                />
               ))}
             </div>
           </div>
@@ -338,44 +374,22 @@ Section.propTypes = {
   center: PropTypes.bool,
 };
 
-function Person({ data }) {
-  const [modal, setModal] = useState(false);
-
-  const toggle = () => setModal(!modal);
-
+function Person({ data, onClick }) {
   return (
     <div className="col-xl-3 col-md-4 col-6 my-3 text-center" key={data.id}>
       <div className="px-3">
-        <Avatar bg={data.photo.publicURL} onClick={toggle} />
+        <Avatar bg={data.photo.publicURL} onClick={onClick} />
       </div>
-      <div className="fw-bold my-2 cursor-pointer" onClick={toggle}>
+      <div className="fw-bold my-2 cursor-pointer" onClick={onClick}>
         {data.title}
       </div>
-
-      <Modal isOpen={modal} toggle={toggle} centered size="lg">
-        <ModalHeader toggle={toggle}>{data.title}</ModalHeader>
-        <ModalBody>
-          <p>
-            <em>{data.role}</em>
-          </p>
-          <div
-            dangerouslySetInnerHTML={{
-              __html: marked.parse(data.bio),
-            }}
-          />
-        </ModalBody>
-        <ModalFooter>
-          <Button color="secondary" onClick={toggle}>
-            Close
-          </Button>
-        </ModalFooter>
-      </Modal>
     </div>
   );
 }
 
 Person.propTypes = {
   data: PropTypes.object,
+  onClick: PropTypes.func,
 };
 
 function Register() {
