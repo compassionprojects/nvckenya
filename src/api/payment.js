@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   const { price } = req.body;
   const payment = await mollieClient.payments.create({
     amount: {
-      value: price,
+      value: price.toFixed(2),
       currency: 'EUR',
     },
     description: 'My first API payment',

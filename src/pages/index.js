@@ -138,6 +138,8 @@ export default function Home({ data }) {
     };
   });
 
+  const [activeTier] = _tiers.filter((t) => t.isActive);
+
   return (
     <>
       {/* Hero section */}
@@ -369,7 +371,12 @@ export default function Home({ data }) {
                 </div>
               ))}
             </div>
-            <RegistrationForm terms_url={registration.terms_url} />
+            {activeTier && (
+              <RegistrationForm
+                terms_url={registration.terms_url}
+                price={parseInt(activeTier.price, 10)}
+              />
+            )}
           </div>
         </Section>
 

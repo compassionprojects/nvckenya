@@ -4,6 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { FormGroup, Label, Button } from 'reactstrap';
 import { object, string, boolean } from 'yup';
 import classnames from 'classnames';
+import axios from 'axios';
 
 let paymentSchema = object({
   name: string().required(),
@@ -13,19 +14,21 @@ let paymentSchema = object({
     .required(),
 });
 
-export default function RegistrationForm({ terms_url }) {
+export default function RegistrationForm({ terms_url, price }) {
+  const handleSubmit = async (values, { setSubmitting }) => {
+    const { data } = await axios.post('/api/payment', { price });
+    alert(JSON.stringify(data, null, 2));
+    // todo: redirect user to data.paymentUrl
+    setSubmitting(false);
+  };
+
   return (
     <Formik
       initialValues={{ email: '', name: '', terms: false }}
       validationSchema={paymentSchema}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          setSubmitting(false);
-        }, 400);
-      }}>
+      onSubmit={handleSubmit}>
       {({ isSubmitting, errors, touched, isValid }) => (
-        <Form>
+        <Form data-netlify="true" name="registration" method="post">
           <FormGroup floating>
             <Field
               placeholder="Name"
@@ -91,4 +94,5 @@ export default function RegistrationForm({ terms_url }) {
 
 RegistrationForm.propTypes = {
   terms_url: PropTypes.string,
+  price: PropTypes.number,
 };
