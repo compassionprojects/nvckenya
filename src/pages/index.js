@@ -122,12 +122,21 @@ export default function Home({ data }) {
 
   const dates = getDates(start_date, end_date);
 
-  const _tiers = tiers.map((t) => ({
-    ...t,
-    isActive:
-      isAfter(new Date(), new Date(t.start_date)) &&
-      isBefore(new Date(), new Date(t.end_date)),
-  }));
+  const _tiers = tiers.map((t) => {
+    const is_after = isAfter(new Date(), new Date(t.start_date));
+    const is_before = isBefore(new Date(), new Date(t.end_date));
+    const has_passed = isBefore(new Date(t.end_date), new Date());
+    const is_in_future = isAfter(new Date(t.start_date), new Date());
+    return {
+      ...t,
+      isActive: is_after && is_before,
+      displayDate: has_passed
+        ? `Until ${format(new Date(t.end_date), 'dd MMM yyyy')}`
+        : is_in_future
+        ? `From ${format(new Date(t.start_date), 'dd MMM yyyy')}`
+        : `Until ${format(new Date(t.end_date), 'dd MMM yyyy')}`, // present
+    };
+  });
 
   return (
     <>
@@ -356,11 +365,7 @@ export default function Home({ data }) {
                     {t.price}
                   </span>{' '}
                   <br />
-                  <small className="text-body-tertiary">
-                    {t.isActive
-                      ? `Until ${format(new Date(t.end_date), 'dd MMM yyyy')}`
-                      : `From ${format(new Date(t.start_date), 'dd MMM yyyy')}`}
-                  </small>
+                  <small className="text-body-tertiary">{t.displayDate}</small>
                 </div>
               ))}
             </div>
