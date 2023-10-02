@@ -1,5 +1,7 @@
 const siteUrl = 'https://nvckenya.org';
 
+exports.siteUrl = siteUrl;
+
 module.exports = {
   siteMetadata: {
     title: 'NVC Kenya',
