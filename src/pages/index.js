@@ -8,6 +8,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import format from 'date-fns/format';
 import Footer from '../components/Footer';
 import Nav from '../components/Nav';
+import RegistrationForm from '../components/RegistrationForm';
 
 // get the latest retreat by sorting latest
 export const query = graphql`
@@ -43,6 +44,15 @@ export const query = graphql`
             trainers
             organisers
             travel
+          }
+          registration {
+            text
+            terms_url
+          }
+          tiers {
+            title
+            price
+            date
           }
           seo {
             seo_title
@@ -83,12 +93,14 @@ export default function Home({ data }) {
   const {
     title,
     intro,
-    contact_email,
+    // contact_email,
     hero_image,
     program,
     start_date,
     end_date,
     city,
+    registration,
+    tiers,
   } = data.allRetreatsYaml.edges[0].node;
   const people = data.allTeamYaml.edges.map((e) => e.node);
   const trainers = people.filter((p) => program.trainers.includes(p.user_id));
@@ -306,15 +318,14 @@ export default function Home({ data }) {
 
         {/* Registrations */}
         <Section id="registrations">
-          <h1 className="text-center fw-bold">Register</h1>
-          <div className="col-lg-6 mx-auto my-3 text-center mb-4">
-            <p>
-              Registrations will soon be open, in the meantime if you have
-              questions, you may contact us
-            </p>
-            <a href={`mailto:${contact_email}`} className="btn btn-secondary">
-              Contact us
-            </a>
+          <div className="col-lg-4 mx-auto mb-5">
+            <h1 className="fw-bold">Register</h1>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: marked.parse(registration.text),
+              }}
+            />
+            <RegistrationForm terms_url={registration.terms_url} />
           </div>
         </Section>
 
