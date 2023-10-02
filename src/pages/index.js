@@ -6,6 +6,9 @@ import classnames from 'classnames';
 import { marked } from 'marked';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import format from 'date-fns/format';
+import isBefore from 'date-fns/isBefore';
+import isAfter from 'date-fns/isAfter';
+
 import Footer from '../components/Footer';
 import Nav from '../components/Nav';
 import RegistrationForm from '../components/RegistrationForm';
@@ -52,7 +55,8 @@ export const query = graphql`
           tiers {
             title
             price
-            date
+            start_date
+            end_date
           }
           seo {
             seo_title
@@ -117,6 +121,13 @@ export default function Home({ data }) {
   };
 
   const dates = getDates(start_date, end_date);
+
+  const _tiers = tiers.map((t) => ({
+    ...t,
+    isActive:
+      isAfter(new Date(), new Date(t.start_date)) &&
+      isBefore(new Date(), new Date(t.end_date)),
+  }));
 
   return (
     <>
@@ -325,6 +336,34 @@ export default function Home({ data }) {
                 __html: marked.parse(registration.text),
               }}
             />
+            <div className="d-flex gap-3 my-4">
+              {_tiers.map((t) => (
+                <div
+                  key={t.price}
+                  className={classnames('p-4 rounded', {
+                    'border-success border': t.isActive,
+                    'border-secondary-subtle text-body-tertiary': !t.isActive,
+                  })}>
+                  <strong>{t.title}</strong>{' '}
+                  {/* t.isActive && (
+                    <Badge color="success" pill className="fw-normal">
+                      active
+                    </Badge>
+                  ) */}
+                  <br />
+                  <span
+                    className={classnames('lead', { 'fw-bold': t.isActive })}>
+                    {t.price}
+                  </span>{' '}
+                  <br />
+                  <small className="text-body-tertiary">
+                    {t.isActive
+                      ? `Until ${format(new Date(t.end_date), 'dd MMM yyyy')}`
+                      : `From ${format(new Date(t.start_date), 'dd MMM yyyy')}`}
+                  </small>
+                </div>
+              ))}
+            </div>
             <RegistrationForm terms_url={registration.terms_url} />
           </div>
         </Section>

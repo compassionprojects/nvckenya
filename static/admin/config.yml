@@ -5,7 +5,7 @@ backend:
 media_folder: "static/images/uploads"
 public_folder: "/images/uploads"
 
-local_backend: true
+# local_backend: true
 
 collections:
   - name: retreats
@@ -135,12 +135,18 @@ collections:
           - name: price
             label: Price
             widget: string
-          - name: date
+          - name: start_date
             label: Date
             widget: datetime
             date_format: "dd/MM/yyyy"
             time_format: false
-            hint: "Date until this tier is valid"
+            hint: "Date from which this tier starts"
+          - name: end_date
+            label: Date
+            widget: datetime
+            date_format: "dd/MM/yyyy"
+            time_format: false
+            hint: "Date until which this tier is valid"
 
   - name: team
     label: Team

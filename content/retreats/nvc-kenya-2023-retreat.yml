@@ -234,6 +234,10 @@ tiers:
   - date: 2023-10-25
     title: Early bird
     price: 1699€
+    start_date: 2023-10-02
+    end_date: 2023-10-25
   - title: Standard
     date: 2023-12-01
     price: 2000€
+    start_date: 2023-10-26
+    end_date: 2023-12-01

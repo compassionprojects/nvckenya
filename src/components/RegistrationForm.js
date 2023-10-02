@@ -24,7 +24,7 @@ export default function RegistrationForm({ terms_url }) {
           setSubmitting(false);
         }, 400);
       }}>
-      {({ isSubmitting, errors, touched }) => (
+      {({ isSubmitting, errors, touched, isValid }) => (
         <Form>
           <FormGroup floating>
             <Field
@@ -64,7 +64,7 @@ export default function RegistrationForm({ terms_url }) {
               <a href={terms_url} target="_blank" rel="noreferrer">
                 Participants Agreements
               </a>{' '}
-              of the event
+              of the retreat
             </Label>
             <ErrorMessage
               name="terms"
@@ -77,9 +77,12 @@ export default function RegistrationForm({ terms_url }) {
             size="lg"
             color="primary"
             type="submit"
-            disabled={isSubmitting}>
-            Submit
+            disabled={isSubmitting || !isValid}>
+            Register
           </Button>
+          <div className="mt-2 small text-body-tertiary">
+            You will be redirected to make payment
+          </div>
         </Form>
       )}
     </Formik>
