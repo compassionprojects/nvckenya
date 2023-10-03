@@ -292,7 +292,7 @@ export default function RegistrationForm({
                   className="form-check-input"
                 />{' '}
                 <Label for="can_pay">
-                  Yes, I can pay {activeTier[pricingField]}
+                  Yes, I can contribute {activeTier[pricingField]}
                 </Label>
               </FormGroup>
             </div>
