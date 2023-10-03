@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { countries, countryCodes } from '../lib/countries';
+import { countries, countryCodes, isAfrica } from '../lib/countries';
 import { FormGroup, Label, Button } from 'reactstrap';
 import { object, string, boolean } from 'yup';
 import classnames from 'classnames';
 import axios from 'axios';
+
+const FORM_NAME = 'registration';
 
 let paymentSchema = object({
   first_name: string().required(),
@@ -33,16 +35,31 @@ const initialValues = {
 
 export default function RegistrationForm({ terms_url, price, order_item }) {
   const handleSubmit = async (values, { setSubmitting }) => {
-    // @todo: submit the form to netlify first, use form-name attribute
-    // @todo: if african countries, display parity rates and show other payment options
-    // @todo: otherwise create order otherwise
-    const { data } = await axios.post('/api/create_order', {
+    const formData = {
       ...values,
       price,
       order_item,
-    });
-    alert(JSON.stringify(data, null, 2));
-    // @todo: redirect user to data.paymentUrl
+    };
+
+    // @todo: submit the form to netlify first, use form-name attribute
+    await axios.post(
+      '/',
+      { ...formData, 'form-name': FORM_NAME },
+      {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      },
+    );
+
+    // @todo: if african countries,
+    if (isAfrica(values.country)) {
+      // display payment options with parity rates
+    } else {
+      // @todo: otherwise create order
+      const { data } = await axios.post('/api/create_order', formData);
+      alert(JSON.stringify(data, null, 2));
+      // redirect user to data.paymentUrl
+    }
+
     setSubmitting(false);
   };
 
@@ -52,7 +69,14 @@ export default function RegistrationForm({ terms_url, price, order_item }) {
       validationSchema={paymentSchema}
       onSubmit={handleSubmit}>
       {({ isSubmitting, errors, touched, isValid }) => (
-        <Form method="post" className="row">
+        <Form
+          method="post"
+          className="row"
+          data-netlify="true"
+          data-netlify-honeypot="bot-field"
+          name={FORM_NAME}>
+          {/* The `form-name` hidden field is required to support form submissions without JavaScript */}
+          <input type="hidden" name="form-name" value={FORM_NAME} />
           <div className="col-md-6">
             <FormGroup floating>
               <Field
