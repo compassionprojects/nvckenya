@@ -71,7 +71,7 @@ export const query = graphql`
             intro
           }
           scholarship_info
-          payment_methods {
+          payment_options {
             bank_transfer
             mobile_money_transfer
           }
@@ -117,7 +117,7 @@ export default function Home({ data }) {
     tiers,
     sliding_scale,
     scholarship_info,
-    payment_methods,
+    payment_options,
   } = data.allRetreatsYaml.edges[0].node;
   const people = data.allTeamYaml.edges.map((e) => e.node);
   const trainers = people.filter((p) => program.trainers.includes(p.user_id));
@@ -335,7 +335,7 @@ export default function Home({ data }) {
 
         {/* Registrations */}
         <Section id="registrations">
-          <div className="col-lg-4 mx-auto mb-5">
+          <div className="col-lg-6 col-xl-4 mx-auto mb-5">
             <h1 className="fw-bold text-center">Register</h1>
             <div
               dangerouslySetInnerHTML={{
@@ -349,7 +349,7 @@ export default function Home({ data }) {
               tiers={tiers}
               sliding_scale={sliding_scale}
               scholarship_info={marked(scholarship_info)}
-              payment_methods={payment_methods}
+              payment_options={payment_options}
             />
           </div>
         </Section>

@@ -170,8 +170,8 @@ collections:
       - name: scholarship_info
         label: Scholarship Information
         widget: markdown
-      - name: payment_methods
-        label: Payment methods
+      - name: payment_options
+        label: Payment options
         widget: object
         required: false
         fields:

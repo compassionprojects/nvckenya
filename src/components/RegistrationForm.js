@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { FormGroup, Label, Button } from 'reactstrap';
-import { object, string, boolean } from 'yup';
+import { object, string, boolean, number } from 'yup';
 import classnames from 'classnames';
 import axios from 'axios';
 import isBefore from 'date-fns/isBefore';
@@ -12,6 +12,13 @@ import { countries, countryCodes, isAfrica } from '../lib/countries';
 
 const FORM_NAME = 'registration';
 const CURRENCY = '€'; // EUR
+const DEFAULT_PAYMENT_METHOD = 'mollie';
+
+const payment_methods = [
+  { name: 'Credit or debit card', method: DEFAULT_PAYMENT_METHOD },
+  { name: 'Direct Bank transfer', method: 'bank_transfer' },
+  { name: 'Mobile money transfer', method: 'mobile_money_transfer' },
+];
 
 let paymentSchema = object({
   first_name: string().required(),
@@ -24,6 +31,12 @@ let paymentSchema = object({
   terms: boolean()
     .oneOf([true], 'You must read and accept the Participants Agreement')
     .required(),
+  can_pay: boolean().required(),
+  slided_price: number().optional(),
+  scholarship_support: boolean().required(),
+  payment_method: string()
+    .oneOf(payment_methods.map((t) => t.method))
+    .optional(),
 });
 
 const initialValues = {
@@ -37,7 +50,7 @@ const initialValues = {
   terms: false,
   can_pay: true,
   slided_price: 0,
-  payment_type: 'mollie',
+  payment_method: DEFAULT_PAYMENT_METHOD,
   scholarship_support: false,
 };
 
@@ -48,14 +61,16 @@ export default function RegistrationForm({
   tiers,
   sliding_scale,
   scholarship_info,
-  payment_methods,
+  payment_options,
 }) {
   const [isAfricanCountry, setIsAfricanCountry] = useState(false);
   const [pricingField, setPricingField] = useState('price');
   const onCountrySelect = (c) => {
-    if (isAfrica(c)) setPricingField('parity_price');
-    else setPricingField('price');
-    setIsAfricanCountry(isAfrica(c));
+    const _isAfrica = isAfrica(c);
+    if (_isAfrica) {
+      setPricingField('parity_price');
+    } else setPricingField('price');
+    setIsAfricanCountry(_isAfrica);
   };
 
   const slidingRange = createNumberArray(
@@ -63,12 +78,6 @@ export default function RegistrationForm({
     parseInt(sliding_scale.max, 10),
     parseInt(sliding_scale.step, 10),
   );
-
-  const payment_types = [
-    { name: 'Credit card', type: 'mollie' },
-    { name: 'Direct Bank transfer', type: 'bank_transfer' },
-    { name: 'Mobile money transfer', type: 'mobile_money_transfer' },
-  ];
 
   const _tiers = tiers.map((t) => {
     const is_after = isAfter(new Date(), new Date(t.start_date));
@@ -150,7 +159,7 @@ export default function RegistrationForm({
           isValid,
           setFieldTouched,
           setFieldValue,
-          values: { can_pay, payment_type, scholarship_support },
+          values: { can_pay, payment_method, scholarship_support },
         }) => (
           <Form
             method="post"
@@ -250,6 +259,14 @@ export default function RegistrationForm({
                     const code = e.target.value;
                     setFieldTouched('country', true);
                     setFieldValue('country', code);
+                    setFieldValue('can_pay', true);
+                    setFieldValue('scholarship_support', false);
+                    if (isAfrica(code)) {
+                      setFieldValue(
+                        'slided_price',
+                        slidingRange[slidingRange.length - 1].toString(),
+                      );
+                    } else setFieldValue('slided_price', 0);
                     onCountrySelect(code);
                   }}
                   className={classnames('form-control', {
@@ -311,49 +328,50 @@ export default function RegistrationForm({
                     <Field
                       placeholder="Payment method"
                       as="select"
-                      name="payment_type"
+                      name="payment_method"
                       className="form-control">
-                      {payment_types.map((t) => (
-                        <option value={t.type} key={t.type}>
+                      {payment_methods.map((t) => (
+                        <option value={t.method} key={t.method}>
                           {t.name}
                         </option>
                       ))}
                     </Field>
-                    <Label for="payment_type">Payment method</Label>
+                    <Label for="payment_method">Payment method</Label>
                   </FormGroup>
                 </div>
 
-                {payment_type !== 'mollie' && (
-                  <div className="my-2 respect-newlines">
-                    {payment_methods[payment_type]}
+                {payment_method !== DEFAULT_PAYMENT_METHOD && (
+                  <div className="mt-2 mb-3 respect-newlines">
+                    {payment_options[payment_method]}
                   </div>
                 )}
               </>
             )}
 
             {!can_pay && (
-              <div className="col-12">
-                <FormGroup check>
-                  <Field
-                    type="checkbox"
-                    name="scholarship_support"
-                    id="scholarship_support"
-                    className="form-check-input"
-                  />{' '}
-                  <Label for="scholarship_support">
-                    I need scholarship support
-                  </Label>
-                </FormGroup>
-              </div>
-            )}
-
-            {scholarship_support && (
-              <div
-                className="my-2"
-                dangerouslySetInnerHTML={{
-                  __html: scholarship_info,
-                }}
-              />
+              <>
+                <div className="col-12">
+                  <FormGroup check>
+                    <Field
+                      type="checkbox"
+                      name="scholarship_support"
+                      id="scholarship_support"
+                      className="form-check-input"
+                    />{' '}
+                    <Label for="scholarship_support">
+                      I need scholarship support
+                    </Label>
+                  </FormGroup>
+                </div>
+                {scholarship_support && (
+                  <div
+                    className="my-2"
+                    dangerouslySetInnerHTML={{
+                      __html: scholarship_info,
+                    }}
+                  />
+                )}
+              </>
             )}
 
             {/*
@@ -408,7 +426,7 @@ export default function RegistrationForm({
                 disabled={isSubmitting || !isValid}>
                 Register
               </Button>
-              {payment_type === 'mollie' && (
+              {payment_method === DEFAULT_PAYMENT_METHOD && (
                 <div className="mt-2 small text-body-tertiary text-center">
                   You will be redirected to make payment
                 </div>
@@ -428,7 +446,7 @@ RegistrationForm.propTypes = {
   tiers: PropTypes.array,
   sliding_scale: PropTypes.object,
   scholarship_info: PropTypes.string,
-  payment_methods: PropTypes.object,
+  payment_options: PropTypes.object,
 };
 
 function createNumberArray(min, max, step) {
