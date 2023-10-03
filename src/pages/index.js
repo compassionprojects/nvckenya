@@ -123,7 +123,6 @@ export default function Home({ data }) {
     else setPricingField('price');
   };
   const onRegistration = (data) => {
-    console.log(data);
     if (isAfrica(data.country)) setAlternatePayment(true);
   };
 
