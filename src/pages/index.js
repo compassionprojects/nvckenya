@@ -6,9 +6,6 @@ import classnames from 'classnames';
 import { marked } from 'marked';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import format from 'date-fns/format';
-import isBefore from 'date-fns/isBefore';
-import isAfter from 'date-fns/isAfter';
-import { isAfrica } from '../lib/countries';
 
 import Footer from '../components/Footer';
 import Nav from '../components/Nav';
@@ -67,7 +64,17 @@ export const query = graphql`
               publicURL
             }
           }
-          alternate_payment_options
+          sliding_scale {
+            min
+            max
+            step
+            intro
+          }
+          scholarship_info
+          payment_methods {
+            bank_transfer
+            mobile_money_transfer
+          }
         }
       }
     }
@@ -108,23 +115,15 @@ export default function Home({ data }) {
     city,
     registration,
     tiers,
-    alternate_payment_options,
+    sliding_scale,
+    scholarship_info,
+    payment_methods,
   } = data.allRetreatsYaml.edges[0].node;
   const people = data.allTeamYaml.edges.map((e) => e.node);
   const trainers = people.filter((p) => program.trainers.includes(p.user_id));
   const organisers = people.filter((p) =>
     program.organisers.includes(p.user_id),
   );
-
-  const [showAlternatePayment, setAlternatePayment] = useState(false);
-  const [pricingField, setPricingField] = useState('price');
-  const onCountrySelect = (c) => {
-    if (isAfrica(c)) setPricingField('parity_price');
-    else setPricingField('price');
-  };
-  const onRegistration = (data) => {
-    if (isAfrica(data.country)) setAlternatePayment(true);
-  };
 
   const [person, setPerson] = useState({});
   const [modal, setModal] = useState(false);
@@ -135,24 +134,6 @@ export default function Home({ data }) {
   };
 
   const dates = getDates(start_date, end_date);
-
-  const _tiers = tiers.map((t) => {
-    const is_after = isAfter(new Date(), new Date(t.start_date));
-    const is_before = isBefore(new Date(), new Date(t.end_date));
-    const has_passed = isBefore(new Date(t.end_date), new Date());
-    const is_in_future = isAfter(new Date(t.start_date), new Date());
-    return {
-      ...t,
-      isActive: is_after && is_before,
-      displayDate: has_passed
-        ? `Until ${format(new Date(t.end_date), 'dd MMM yyyy')}`
-        : is_in_future
-        ? `From ${format(new Date(t.start_date), 'dd MMM yyyy')}`
-        : `Until ${format(new Date(t.end_date), 'dd MMM yyyy')}`, // present
-    };
-  });
-
-  const [activeTier] = _tiers.filter((t) => t.isActive);
 
   return (
     <>
@@ -355,52 +336,21 @@ export default function Home({ data }) {
         {/* Registrations */}
         <Section id="registrations">
           <div className="col-lg-4 mx-auto mb-5">
-            <h1 className="fw-bold">Register</h1>
+            <h1 className="fw-bold text-center">Register</h1>
             <div
               dangerouslySetInnerHTML={{
                 __html: marked.parse(registration.text),
               }}
             />
-            <div className="d-flex gap-3 my-4">
-              {_tiers.map((t) => (
-                <div
-                  key={t.price}
-                  className={classnames('p-4 rounded', {
-                    'border-success border': t.isActive,
-                    'border-secondary-subtle text-body-tertiary': !t.isActive,
-                  })}>
-                  <strong>{t.title}</strong>{' '}
-                  {/* t.isActive && (
-                    <Badge color="success" pill className="fw-normal">
-                      active
-                    </Badge>
-                  ) */}
-                  <br />
-                  <span
-                    className={classnames('lead', { 'fw-bold': t.isActive })}>
-                    {t[pricingField]}
-                  </span>{' '}
-                  <br />
-                  <small className="text-body-tertiary">{t.displayDate}</small>
-                </div>
-              ))}
-            </div>
-            {activeTier && !showAlternatePayment && (
-              <RegistrationForm
-                terms_url={registration.terms_url}
-                price={parseInt(activeTier[pricingField], 10)}
-                order_item={`${title} - ${activeTier.title}`}
-                onCountrySelect={onCountrySelect}
-                onSubmit={onRegistration}
-              />
-            )}
-            {showAlternatePayment && (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: marked.parse(alternate_payment_options),
-                }}
-              />
-            )}
+
+            <RegistrationForm
+              terms_url={registration.terms_url}
+              order_item={title}
+              tiers={tiers}
+              sliding_scale={sliding_scale}
+              scholarship_info={marked.parse(scholarship_info)}
+              payment_methods={payment_methods}
+            />
           </div>
         </Section>
 

@@ -150,9 +150,38 @@ collections:
             date_format: "dd/MM/yyyy"
             time_format: false
             hint: "Date until which this tier is valid"
-      - name: alternate_payment_options
-        label: Alternate payment instructions
+      - name: sliding_scale
+        label: Sliding scale
+        widget: object
+        required: false
+        fields:
+          - name: intro
+            label: Intro
+            widget: text
+          - name: min
+            label: Minimum price
+            widget: string
+          - name: max
+            label: Maximum price
+            widget: string
+          - name: step
+            label: Step
+            widget: number
+      - name: scholarship_info
+        label: Scholarship Information
         widget: markdown
+      - name: payment_methods
+        label: Payment methods
+        widget: object
+        required: false
+        fields:
+          - name: bank_transfer
+            title: Direct Bank transfer information
+            widget: text
+            hint: Should contain bank account details
+          - name: mobile_money_transfer
+            title: Mobile money transfer
+            widget: text
 
   - name: team
     label: Team
