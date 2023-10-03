@@ -19,5 +19,6 @@ renderer.link = (href, title, text) => {
 };
 
 export default function (str) {
+  if (typeof window === 'undefined') return marked(str);
   return marked(str, { renderer });
 }
