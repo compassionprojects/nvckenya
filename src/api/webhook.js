@@ -2,12 +2,14 @@ const mollieClient = require('../lib/mollie');
 
 export default async function handler(req, res) {
   const { id } = req.body;
-  const payment = await mollieClient.payments.get(id);
+  const order = await mollieClient.orders.get(id);
 
-  console.log(payment);
-  const isPaid = payment.isPaid();
+  console.log(order);
+  const succeeded = order.isPaid || order.isAuthorized;
 
-  if (isPaid) {
-    res.status(200).send();
+  if (succeeded) {
+    // @todo: send out order confirmation to customer's email
   }
+
+  res.status(200).send();
 }

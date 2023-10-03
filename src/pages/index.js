@@ -375,6 +375,7 @@ export default function Home({ data }) {
               <RegistrationForm
                 terms_url={registration.terms_url}
                 price={parseInt(activeTier.price, 10)}
+                order_item={`${title} - ${activeTier.title}`}
               />
             )}
           </div>
