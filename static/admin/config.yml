@@ -135,6 +135,9 @@ collections:
           - name: price
             label: Price
             widget: string
+          - name: parity_price
+            label: Parity Price
+            widget: string
           - name: start_date
             label: Date
             widget: datetime
@@ -147,6 +150,9 @@ collections:
             date_format: "dd/MM/yyyy"
             time_format: false
             hint: "Date until which this tier is valid"
+      - name: alternate_payment_options
+        label: Alternate payment instructions
+        widget: markdown
 
   - name: team
     label: Team

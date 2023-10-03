@@ -8,6 +8,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import format from 'date-fns/format';
 import isBefore from 'date-fns/isBefore';
 import isAfter from 'date-fns/isAfter';
+import { isAfrica } from '../lib/countries';
 
 import Footer from '../components/Footer';
 import Nav from '../components/Nav';
@@ -55,6 +56,7 @@ export const query = graphql`
           tiers {
             title
             price
+            parity_price
             start_date
             end_date
           }
@@ -65,6 +67,7 @@ export const query = graphql`
               publicURL
             }
           }
+          alternate_payment_options
         }
       }
     }
@@ -105,12 +108,24 @@ export default function Home({ data }) {
     city,
     registration,
     tiers,
+    alternate_payment_options,
   } = data.allRetreatsYaml.edges[0].node;
   const people = data.allTeamYaml.edges.map((e) => e.node);
   const trainers = people.filter((p) => program.trainers.includes(p.user_id));
   const organisers = people.filter((p) =>
     program.organisers.includes(p.user_id),
   );
+
+  const [showAlternatePayment, setAlternatePayment] = useState(false);
+  const [pricingField, setPricingField] = useState('price');
+  const onCountrySelect = (c) => {
+    if (isAfrica(c)) setPricingField('parity_price');
+    else setPricingField('price');
+  };
+  const onRegistration = (data) => {
+    console.log(data);
+    if (isAfrica(data.country)) setAlternatePayment(true);
+  };
 
   const [person, setPerson] = useState({});
   const [modal, setModal] = useState(false);
@@ -364,18 +379,27 @@ export default function Home({ data }) {
                   <br />
                   <span
                     className={classnames('lead', { 'fw-bold': t.isActive })}>
-                    {t.price}
+                    {t[pricingField]}
                   </span>{' '}
                   <br />
                   <small className="text-body-tertiary">{t.displayDate}</small>
                 </div>
               ))}
             </div>
-            {activeTier && (
+            {activeTier && !showAlternatePayment && (
               <RegistrationForm
                 terms_url={registration.terms_url}
-                price={parseInt(activeTier.price, 10)}
+                price={parseInt(activeTier[pricingField], 10)}
                 order_item={`${title} - ${activeTier.title}`}
+                onCountrySelect={onCountrySelect}
+                onSubmit={onRegistration}
+              />
+            )}
+            {showAlternatePayment && (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: marked.parse(alternate_payment_options),
+                }}
               />
             )}
           </div>

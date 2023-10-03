@@ -33,7 +33,13 @@ const initialValues = {
   terms: false,
 };
 
-export default function RegistrationForm({ terms_url, price, order_item }) {
+export default function RegistrationForm({
+  terms_url,
+  price,
+  order_item,
+  onSubmit,
+  onCountrySelect,
+}) {
   const handleSubmit = async (values, { setSubmitting }) => {
     const formData = {
       ...values,
@@ -42,13 +48,16 @@ export default function RegistrationForm({ terms_url, price, order_item }) {
     };
 
     // @todo: submit the form to netlify first, use form-name attribute
-    await axios.post(
-      '/',
-      { ...formData, 'form-name': FORM_NAME },
-      {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      },
-    );
+    // skip for development
+    if (process.env.NODE_ENV !== 'development') {
+      await axios.post(
+        '/',
+        { ...formData, 'form-name': FORM_NAME },
+        {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        },
+      );
+    }
 
     // @todo: if african countries,
     if (isAfrica(values.country)) {
@@ -61,6 +70,7 @@ export default function RegistrationForm({ terms_url, price, order_item }) {
     }
 
     setSubmitting(false);
+    onSubmit(formData);
   };
 
   return (
@@ -68,7 +78,14 @@ export default function RegistrationForm({ terms_url, price, order_item }) {
       initialValues={initialValues}
       validationSchema={paymentSchema}
       onSubmit={handleSubmit}>
-      {({ isSubmitting, errors, touched, isValid }) => (
+      {({
+        isSubmitting,
+        errors,
+        touched,
+        isValid,
+        setFieldTouched,
+        setFieldValue,
+      }) => (
         <Form
           method="post"
           className="row"
@@ -163,6 +180,11 @@ export default function RegistrationForm({ terms_url, price, order_item }) {
                 placeholder="Country"
                 as="select"
                 name="country"
+                onChange={(e) => {
+                  setFieldTouched('country', true);
+                  setFieldValue('country', e.target.value);
+                  onCountrySelect(e.target.value);
+                }}
                 className={classnames('form-control', {
                   'is-invalid': errors.country && touched.country,
                 })}>
@@ -222,4 +244,6 @@ RegistrationForm.propTypes = {
   terms_url: PropTypes.string,
   price: PropTypes.number,
   order_item: PropTypes.string,
+  onSubmit: PropTypes.func,
+  onCountrySelect: PropTypes.func,
 };
