@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import classnames from 'classnames';
-import { marked } from 'marked';
+import marked from '../lib/marked';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import format from 'date-fns/format';
 
@@ -176,7 +176,7 @@ export default function Home({ data }) {
           </p>
           <div
             dangerouslySetInnerHTML={{
-              __html: marked.parse(person.bio || ''),
+              __html: marked(person.bio || ''),
             }}
           />
         </ModalBody>
@@ -198,7 +198,7 @@ export default function Home({ data }) {
           <div className="col-lg-6 mx-auto my-3">
             <div
               dangerouslySetInnerHTML={{
-                __html: marked.parse(program.introduction),
+                __html: marked(program.introduction),
               }}
             />
           </div>
@@ -206,7 +206,7 @@ export default function Home({ data }) {
             <h2 className="text-center">Goals</h2>
             <div
               dangerouslySetInnerHTML={{
-                __html: marked.parse(program.goals),
+                __html: marked(program.goals),
               }}
             />
           </div>
@@ -255,7 +255,7 @@ export default function Home({ data }) {
           <h1 className="text-center fw-bold">Pricing</h1>
           <div
             className="col-lg-6 mx-auto my-3"
-            dangerouslySetInnerHTML={{ __html: marked.parse(program.pricing) }}
+            dangerouslySetInnerHTML={{ __html: marked(program.pricing) }}
           />
           <div className="text-center mt-5 mb-4">
             <Register />
@@ -270,7 +270,7 @@ export default function Home({ data }) {
           <div
             className="col-lg-6 mx-auto my-3"
             dangerouslySetInnerHTML={{
-              __html: marked.parse(program.cancellation_policy),
+              __html: marked(program.cancellation_policy),
             }}
           />
           <div className="text-center mt-5 mb-4">
@@ -284,7 +284,7 @@ export default function Home({ data }) {
           <div className="col-lg-6 mx-auto my-3">
             <div
               dangerouslySetInnerHTML={{
-                __html: marked.parse(program.accommodation_details),
+                __html: marked(program.accommodation_details),
               }}
             />
           </div>
@@ -302,7 +302,7 @@ export default function Home({ data }) {
                 <h2>Facilities</h2>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: marked.parse(program.facilities),
+                    __html: marked(program.facilities),
                   }}
                 />
               </div>
@@ -310,7 +310,7 @@ export default function Home({ data }) {
                 <h2>Location</h2>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: marked.parse(program.location),
+                    __html: marked(program.location),
                   }}
                 />
               </div>
@@ -327,7 +327,7 @@ export default function Home({ data }) {
           <div className="col-lg-6 mx-auto my-3">
             <div
               dangerouslySetInnerHTML={{
-                __html: marked.parse(program.travel),
+                __html: marked(program.travel),
               }}
             />
           </div>
@@ -339,7 +339,7 @@ export default function Home({ data }) {
             <h1 className="fw-bold text-center">Register</h1>
             <div
               dangerouslySetInnerHTML={{
-                __html: marked.parse(registration.text),
+                __html: marked(registration.text),
               }}
             />
 
@@ -348,7 +348,7 @@ export default function Home({ data }) {
               order_item={title}
               tiers={tiers}
               sliding_scale={sliding_scale}
-              scholarship_info={marked.parse(scholarship_info)}
+              scholarship_info={marked(scholarship_info)}
               payment_methods={payment_methods}
             />
           </div>
