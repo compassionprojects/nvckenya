@@ -399,18 +399,18 @@ export const Head = ({ data }) => {
   return (
     <>
       <html lang="en" />
-      <body className="nvckenya" />
       <title>{seo_title}</title>
       <meta name="description" content={seo_description} />
       <meta
         name="keywords"
         content={`event, retreat, ${city}, kenya, nonviolent communication, nvc, compassion, self care, wellbeing`}
       />
-
       <meta property="og:title" content={seo_title} />
       <meta property="og:description" content={seo_description} />
       <meta property="og:image" content={seo_image.publicURL} />
       <meta property="og:url" content={data.site.siteMetadata.siteUrl} />
+
+      <body className="nvckenya" />
     </>
   );
 };
