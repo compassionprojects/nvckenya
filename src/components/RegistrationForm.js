@@ -109,7 +109,7 @@ export default function RegistrationForm({
     };
 
     // skip for development or if last name is testing
-    if (
+    /* if (
       process.env.NODE_ENV !== 'development' &&
       !values.last_name.toLowerCase().includes('testing')
     ) {
@@ -118,7 +118,7 @@ export default function RegistrationForm({
       });
     } else {
       console.log(formData);
-    }
+    } */
 
     // if not bank_transfer or mobile_money_transfer create order
     // const { data } = await axios.post('/api/create_order', formData);
@@ -126,7 +126,7 @@ export default function RegistrationForm({
     // redirect user to data.paymentUrl
 
     setSubmitting(false);
-    onSubmit(formData);
+    onSubmit && onSubmit(formData);
   };
 
   return (
