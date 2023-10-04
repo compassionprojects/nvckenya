@@ -56,6 +56,7 @@ export const query = graphql`
             parity_price
             start_date
             end_date
+            price_accommodation
           }
           seo {
             seo_title

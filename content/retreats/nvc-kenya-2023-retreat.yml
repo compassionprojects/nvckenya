@@ -58,7 +58,7 @@ program:
     We are raising funds to support your participation, and we highly appreciate your support in raising funds yourself. Here are the [payment instructions](https://docs.google.com/document/d/19gSoseGkz75K8_DFiuQMnp16yViDve8m3msQaLfhPgI/edit). Please email [kenyanvcretreat@gmail.com](mailto:kenyanvcretreat@gmail.com) for details about the tuition rate and for instructions about how to make the payment.
 
 
-    The cost of this training has two components: 1) Tuition; and 2) Room and Board (Accommodation).
+    The cost of this training has two components: 1) Tuition; and 2) Room and Board (Accommodation). During registration you may choose if you also want to pay for the accommodation or only for the tuition.
 
 
     **1. Tuition (EURO):**
@@ -235,12 +235,14 @@ tiers:
     start_date: 2023-10-02
     end_date: 2023-10-25
     parity_price: 500€
+    price_accommodation: 380€
   - title: Standard
     date: 2023-12-01
     price: 2000€
     start_date: 2023-10-26
     end_date: 2023-12-01
     parity_price: 600€
+    price_accommodation: 380€
 alternate_payment_options: >
   Thank you for registering!  We've received your information. Here's how you
   can pay now

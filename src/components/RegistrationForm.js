@@ -34,6 +34,7 @@ let paymentSchema = object({
   can_pay: boolean().required(),
   price_slided: number().optional(),
   need_scholarship: boolean().required(),
+  need_accommodation: boolean().required(),
   payment_method: string()
     .oneOf(payment_methods.map((t) => t.method))
     .optional(),
@@ -51,6 +52,7 @@ const initialValues = {
   can_pay: true,
   payment_method: DEFAULT_PAYMENT_METHOD,
   need_scholarship: false,
+  need_accommodation: false,
   price_slided: 0,
 };
 
@@ -99,7 +101,7 @@ export default function RegistrationForm({
   const [activeTier] = _tiers.filter((t) => t.isActive);
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    // @todo: calculate total price, consider sliding scale and donation amount
+    // @todo: calculate total price, consider sliding scale, donation amount and accommodation price
     const totalPrice = activeTier[pricingField];
 
     const formData = {
@@ -378,6 +380,20 @@ export default function RegistrationForm({
               </>
             )}
 
+            <div className="col-12">
+              <FormGroup check>
+                <Field
+                  type="checkbox"
+                  name="need_accommodation"
+                  id="need_accommodation"
+                  className="form-check-input"
+                />{' '}
+                <Label for="need_accommodation">
+                  I need accommodation for {activeTier.price_accommodation}
+                </Label>
+              </FormGroup>
+            </div>
+
             {/*
 
           - if country is african
@@ -456,7 +472,7 @@ RegistrationForm.propTypes = {
 function FieldCountryDefault({ onCountrySelect }) {
   const { setFieldValue } = useFormikContext();
   useEffect(() => {
-    // if (process.env.NODE_ENV === 'development') return;
+    if (process.env.NODE_ENV === 'development') return;
 
     async function getCountryData() {
       const {
