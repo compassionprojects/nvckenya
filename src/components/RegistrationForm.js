@@ -396,7 +396,7 @@ export default function RegistrationForm({
                         </option>
                       ))}
                     </Field>
-                    <Label for="payment_method">Payment method</Label>
+                    <Label for="payment_method">Chosen payment method</Label>
                   </FormGroup>
                 </div>
 
@@ -417,9 +417,11 @@ export default function RegistrationForm({
                   className="form-check-input"
                 />{' '}
                 <Label for="need_accommodation">
-                  I need accommodation for {activeTier.price_accommodation}
-                  {currency.symbol}{' '}
-                  <span className="text-muted">(optional)</span>
+                  I would like to pay {activeTier.price_accommodation}
+                  {currency.symbol} for the accommodation now{' '}
+                  <span className="text-muted">
+                    (or you may also pay on arrival)
+                  </span>
                 </Label>
               </FormGroup>
             </div>
@@ -467,7 +469,7 @@ export default function RegistrationForm({
               </FormGroup>
             </div>
 
-            <DisplayTotal activeTier={activeTier} currency={currency} />
+            <TotalPayable activeTier={activeTier} currency={currency} />
 
             <div className="mt-3">
               <Button
@@ -541,7 +543,7 @@ function transformTier(t) {
   };
 }
 
-function DisplayTotal({ activeTier, currency }) {
+function TotalPayable({ activeTier, currency }) {
   const [items, setItems] = useState([]);
   const { values } = useFormikContext();
 
@@ -576,7 +578,7 @@ function DisplayTotal({ activeTier, currency }) {
   );
 }
 
-DisplayTotal.propTypes = {
+TotalPayable.propTypes = {
   activeTier: PropTypes.object,
   currency: PropTypes.object,
 };
