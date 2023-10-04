@@ -32,7 +32,7 @@ let paymentSchema = object({
     .oneOf([true], 'You must read and accept the Participants Agreement')
     .required(),
   can_pay: boolean().required(),
-  slided_price: number().optional(),
+  price_slided: number().optional(),
   need_scholarship: boolean().required(),
   payment_method: string()
     .oneOf(payment_methods.map((t) => t.method))
@@ -49,9 +49,9 @@ const initialValues = {
   country: '',
   terms: false,
   can_pay: true,
-  slided_price: 0,
   payment_method: DEFAULT_PAYMENT_METHOD,
   need_scholarship: false,
+  price_slided: 0,
 };
 
 export default function RegistrationForm({
@@ -63,7 +63,12 @@ export default function RegistrationForm({
   scholarship_info,
   payment_options,
 }) {
+  // we give discounts through parity pricing and sliding scale for african countries
   const [isAfricanCountry, setIsAfricanCountry] = useState(false);
+
+  // to show the actual price or the parity price
+  // - price is the default field which displays actual price
+  // - parity_price is the field which displays parity prices for discounted countries
   const [pricingField, setPricingField] = useState('price');
   const onCountrySelect = (c) => {
     const _isAfrica = isAfrica(c);
@@ -73,12 +78,7 @@ export default function RegistrationForm({
     setIsAfricanCountry(_isAfrica);
   };
 
-  const slidingRange = createNumberArray(
-    parseInt(sliding_scale.min, 10),
-    parseInt(sliding_scale.max, 10),
-    parseInt(sliding_scale.step, 10),
-  );
-
+  // transform the data properly in order to display
   const _tiers = tiers.map((t) => {
     const is_after = isAfter(new Date(), new Date(t.start_date));
     const is_before = isBefore(new Date(), new Date(t.end_date));
@@ -95,6 +95,7 @@ export default function RegistrationForm({
     };
   });
 
+  // through above transformation, find out which tier is active
   const [activeTier] = _tiers.filter((t) => t.isActive);
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -107,6 +108,8 @@ export default function RegistrationForm({
       order_item: `${order_item} - ${activeTier.title}`,
       'form-name': FORM_NAME,
     };
+
+    console.log(formData);
 
     // skip for development or if last name is testing
     /* if (
@@ -159,7 +162,7 @@ export default function RegistrationForm({
           isValid,
           setFieldTouched,
           setFieldValue,
-          values: { can_pay, payment_method, need_scholarship },
+          values: { can_pay, payment_method, need_scholarship, price_slided },
         }) => (
           <Form
             method="post"
@@ -263,10 +266,10 @@ export default function RegistrationForm({
                     setFieldValue('need_scholarship', false);
                     if (isAfrica(code)) {
                       setFieldValue(
-                        'slided_price',
-                        slidingRange[slidingRange.length - 1].toString(),
+                        'price_slided',
+                        parseInt(sliding_scale.max, 10),
                       );
-                    } else setFieldValue('slided_price', 0);
+                    } else setFieldValue('price_slided', 0);
                     onCountrySelect(code);
                   }}
                   className={classnames('form-control', {
@@ -297,35 +300,33 @@ export default function RegistrationForm({
                   Yes, I am able to contribute and pay{' '}
                   {activeTier[pricingField]}
                 </Label>
+                {isAfricanCountry && !can_pay && (
+                  <div className="my-2">
+                    <Label for="price_slided">
+                      <strong>Sliding scale price</strong>
+                    </Label>
+                    <p>{sliding_scale.intro}</p>
+                    <div className="col-12">
+                      <Field
+                        type="range"
+                        name="price_slided"
+                        className="form-range"
+                        id="price_slided"
+                        min={parseInt(sliding_scale.min, 10)}
+                        max={parseInt(sliding_scale.max, 10)}
+                        step={parseInt(sliding_scale.step, 10)}
+                      />
+                      <div className="mb-3">
+                        {price_slided} {CURRENCY}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </FormGroup>
             </div>
 
             {isAfricanCountry && (
               <>
-                {!can_pay && (
-                  <div className="my-2">
-                    <strong>Sliding scale pricing</strong>
-                    <p>{sliding_scale.intro}</p>
-                    <div className="col-12">
-                      {slidingRange.map((n) => (
-                        <FormGroup check inline key={n}>
-                          <Field
-                            type="radio"
-                            name="slided_price"
-                            value={n.toString()}
-                            className="form-check-input"
-                            id={`slided_price_${n}`}
-                          />
-                          <Label for={`slided_price_${n}`}>
-                            {n}
-                            {CURRENCY}
-                          </Label>
-                        </FormGroup>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
                 <div className="col-12">
                   <FormGroup floating>
                     <Field
@@ -451,14 +452,6 @@ RegistrationForm.propTypes = {
   scholarship_info: PropTypes.string,
   payment_options: PropTypes.object,
 };
-
-function createNumberArray(min, max, step) {
-  const result = [];
-  for (let i = min; i <= max; i += step) {
-    result.push(i);
-  }
-  return result;
-}
 
 function FieldCountryDefault({ onCountrySelect }) {
   const { setFieldValue } = useFormikContext();
