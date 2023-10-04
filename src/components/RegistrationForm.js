@@ -346,8 +346,7 @@ export default function RegistrationForm({
                         max={sliding_scale.max}
                         step={sliding_scale.step}
                       />
-                      <div className="mb-3">
-                        You have chosen{' '}
+                      <div className="mb-3 text-center">
                         <strong>
                           {price_slided}
                           {currency.symbol}
@@ -558,7 +557,7 @@ function DisplayTotal({ activeTier, currency }) {
   return (
     <div className=" my-4">
       {items.map((item, idx) => (
-        <div className="d-flex justify-content-between" key={idx}>
+        <div className="d-flex justify-content-between text-muted" key={idx}>
           <span>{item.name}</span>
           <span>
             {item.amount}
@@ -567,11 +566,11 @@ function DisplayTotal({ activeTier, currency }) {
         </div>
       ))}
       <div className="d-flex justify-content-between border-top mt-2 pt-2">
-        <span>Total payable</span>
-        <span>
+        <strong>Total payable</strong>
+        <strong>
           {items.reduce((sum, x) => sum + x.amount, 0)}
           {currency.symbol}
-        </span>
+        </strong>
       </div>
     </div>
   );
