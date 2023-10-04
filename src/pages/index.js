@@ -58,6 +58,10 @@ export const query = graphql`
             end_date
             price_accommodation
           }
+          currency {
+            short_name
+            symbol
+          }
           seo {
             seo_title
             seo_description
@@ -119,6 +123,7 @@ export default function Home({ data }) {
     sliding_scale,
     scholarship_info,
     payment_options,
+    currency,
   } = data.allRetreatsYaml.edges[0].node;
   const people = data.allTeamYaml.edges.map((e) => e.node);
   const trainers = people.filter((p) => program.trainers.includes(p.user_id));
@@ -351,6 +356,7 @@ export default function Home({ data }) {
               sliding_scale={sliding_scale}
               scholarship_info={marked(scholarship_info)}
               payment_options={payment_options}
+              currency={currency}
             />
           </div>
         </Section>

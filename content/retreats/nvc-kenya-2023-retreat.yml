@@ -231,18 +231,18 @@ registration:
 tiers:
   - date: 2023-10-25
     title: Early bird
-    price: 1699€
+    price: "1699"
     start_date: 2023-10-02
     end_date: 2023-10-25
-    parity_price: 500€
-    price_accommodation: 380€
+    parity_price: "500"
+    price_accommodation: "380"
   - title: Standard
     date: 2023-12-01
-    price: 2000€
+    price: "2000"
     start_date: 2023-10-26
     end_date: 2023-12-01
-    parity_price: 600€
-    price_accommodation: 380€
+    parity_price: "600"
+    price_accommodation: "380"
 alternate_payment_options: >
   Thank you for registering!  We've received your information. Here's how you
   can pay now
@@ -291,11 +291,14 @@ alternate_payment_options: >
 
 
   If you have further questions, please ask via mail: [kenyanvcretreat@gmail.com](mailto:kenyanvcretreat@gmail.com)
+currency:
+  short_name: EUR
+  symbol: €
 sliding_scale:
-  intro: If the above local tuition fee is more than you can contribute please
-    use the sliding scale below to choose a price you can afford
-  min: 100€
-  max: 500€
+  intro: If the above local tuition fee is more than you can contribute please use
+    the sliding scale below to choose a price you can afford
+  min: "100"
+  max: "500"
   step: "10"
 scholarship_info: >
   If you still aren't able to pay and contribute, please apply for a

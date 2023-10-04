@@ -124,6 +124,19 @@ collections:
           - name: terms_url
             label: Terms and conditions link
             widget: string
+      - name: currency
+        label: Currency
+        widget: object
+        required: false
+        fields:
+          - name: short_name
+            label: Short name
+            widget: string
+            hint: "For example: EUR, USD"
+          - name: symbol
+            label: Symbol
+            widget: string
+            hint: "For example: €, $"
       - name: tiers
         label: Pricing tiers
         widget: list
@@ -134,10 +147,13 @@ collections:
             hint: "Name for the pricing tier (e.g: Early bird)"
           - name: price
             label: Price
-            widget: string
+            widget: number
           - name: parity_price
             label: Parity Price
-            widget: string
+            widget: number
+          - name: price_accommodation
+            label: Accommodation price
+            widget: number
           - name: start_date
             label: Date
             widget: datetime
@@ -160,10 +176,10 @@ collections:
             widget: text
           - name: min
             label: Minimum price
-            widget: string
+            widget: number
           - name: max
             label: Maximum price
-            widget: string
+            widget: number
           - name: step
             label: Step
             widget: number

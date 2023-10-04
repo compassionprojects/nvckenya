@@ -11,7 +11,6 @@ import format from 'date-fns/format';
 import { countries, countryCodes, isAfrica } from '../lib/countries';
 
 const FORM_NAME = 'registration';
-const CURRENCY = '€'; // EUR
 const DEFAULT_PAYMENT_METHOD = 'mollie';
 
 const payment_methods = [
@@ -64,6 +63,7 @@ export default function RegistrationForm({
   sliding_scale,
   scholarship_info,
   payment_options,
+  currency,
 }) {
   // we give discounts through parity pricing and sliding scale for african countries
   const [isAfricanCountry, setIsAfricanCountry] = useState(false);
@@ -81,21 +81,7 @@ export default function RegistrationForm({
   };
 
   // transform the data properly in order to display
-  const _tiers = tiers.map((t) => {
-    const is_after = isAfter(new Date(), new Date(t.start_date));
-    const is_before = isBefore(new Date(), new Date(t.end_date));
-    const has_passed = isBefore(new Date(t.end_date), new Date());
-    const is_in_future = isAfter(new Date(t.start_date), new Date());
-    return {
-      ...t,
-      isActive: is_after && is_before,
-      displayDate: has_passed
-        ? `Until ${format(new Date(t.end_date), 'dd MMM yyyy')}`
-        : is_in_future
-        ? `From ${format(new Date(t.start_date), 'dd MMM yyyy')}`
-        : `Until ${format(new Date(t.end_date), 'dd MMM yyyy')}`, // present
-    };
-  });
+  const _tiers = tiers.map(transformTier);
 
   // through above transformation, find out which tier is active
   const [activeTier] = _tiers.filter((t) => t.isActive);
@@ -147,6 +133,7 @@ export default function RegistrationForm({
             <strong>{t.title}</strong> <br />
             <span className={classnames('lead', { 'fw-bold': t.isActive })}>
               {t[pricingField]}
+              {currency.symbol}
             </span>{' '}
             <br />
             <small className="text-body-tertiary">{t.displayDate}</small>
@@ -267,10 +254,7 @@ export default function RegistrationForm({
                     setFieldValue('can_pay', true);
                     setFieldValue('need_scholarship', false);
                     if (isAfrica(code)) {
-                      setFieldValue(
-                        'price_slided',
-                        parseInt(sliding_scale.max, 10),
-                      );
+                      setFieldValue('price_slided', sliding_scale.max);
                     } else setFieldValue('price_slided', 0);
                     onCountrySelect(code);
                   }}
@@ -301,6 +285,7 @@ export default function RegistrationForm({
                 <Label for="can_pay">
                   Yes, I am able to contribute and pay{' '}
                   {activeTier[pricingField]}
+                  {currency.symbol}
                 </Label>
                 {isAfricanCountry && !can_pay && (
                   <div className="my-2">
@@ -314,14 +299,38 @@ export default function RegistrationForm({
                         name="price_slided"
                         className="form-range"
                         id="price_slided"
-                        min={parseInt(sliding_scale.min, 10)}
-                        max={parseInt(sliding_scale.max, 10)}
-                        step={parseInt(sliding_scale.step, 10)}
+                        min={sliding_scale.min}
+                        max={sliding_scale.max}
+                        step={sliding_scale.step}
                       />
                       <div className="mb-3">
-                        {price_slided} {CURRENCY}
+                        {price_slided}
+                        {currency.symbol}
                       </div>
                     </div>
+                  </div>
+                )}
+                {!can_pay && (
+                  <div className="col-12">
+                    <FormGroup check>
+                      <Field
+                        type="checkbox"
+                        name="need_scholarship"
+                        id="need_scholarship"
+                        className="form-check-input"
+                      />{' '}
+                      <Label for="need_scholarship">
+                        I need support with a scholarship
+                      </Label>
+                      {need_scholarship && (
+                        <div
+                          className="my-1"
+                          dangerouslySetInnerHTML={{
+                            __html: scholarship_info,
+                          }}
+                        />
+                      )}
+                    </FormGroup>
                   </div>
                 )}
               </FormGroup>
@@ -329,7 +338,7 @@ export default function RegistrationForm({
 
             {isAfricanCountry && (
               <>
-                <div className="col-12">
+                <div className="col-12 mt-2">
                   <FormGroup floating>
                     <Field
                       placeholder="Payment method"
@@ -354,32 +363,6 @@ export default function RegistrationForm({
               </>
             )}
 
-            {!can_pay && (
-              <>
-                <div className="col-12">
-                  <FormGroup check>
-                    <Field
-                      type="checkbox"
-                      name="need_scholarship"
-                      id="need_scholarship"
-                      className="form-check-input"
-                    />{' '}
-                    <Label for="need_scholarship">
-                      I need support with a scholarship
-                    </Label>
-                    {need_scholarship && (
-                      <div
-                        className="my-2"
-                        dangerouslySetInnerHTML={{
-                          __html: scholarship_info,
-                        }}
-                      />
-                    )}
-                  </FormGroup>
-                </div>
-              </>
-            )}
-
             <div className="col-12">
               <FormGroup check>
                 <Field
@@ -390,6 +373,8 @@ export default function RegistrationForm({
                 />{' '}
                 <Label for="need_accommodation">
                   I need accommodation for {activeTier.price_accommodation}
+                  {currency.symbol}{' '}
+                  <span className="text-muted">(optional)</span>
                 </Label>
               </FormGroup>
             </div>
@@ -467,6 +452,7 @@ RegistrationForm.propTypes = {
   sliding_scale: PropTypes.object,
   scholarship_info: PropTypes.string,
   payment_options: PropTypes.object,
+  currency: PropTypes.object,
 };
 
 function FieldCountryDefault({ onCountrySelect }) {
@@ -492,3 +478,19 @@ function FieldCountryDefault({ onCountrySelect }) {
 FieldCountryDefault.propTypes = {
   onCountrySelect: PropTypes.func,
 };
+
+function transformTier(t) {
+  const is_after = isAfter(new Date(), new Date(t.start_date));
+  const is_before = isBefore(new Date(), new Date(t.end_date));
+  const has_passed = isBefore(new Date(t.end_date), new Date());
+  const is_in_future = isAfter(new Date(t.start_date), new Date());
+  return {
+    ...t,
+    isActive: is_after && is_before,
+    displayDate: has_passed
+      ? `Until ${format(new Date(t.end_date), 'dd MMM yyyy')}`
+      : is_in_future
+      ? `From ${format(new Date(t.start_date), 'dd MMM yyyy')}`
+      : `Until ${format(new Date(t.end_date), 'dd MMM yyyy')}`, // present
+  };
+}
