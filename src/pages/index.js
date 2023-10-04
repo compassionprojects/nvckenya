@@ -341,7 +341,7 @@ export default function Home({ data }) {
 
         {/* Registrations */}
         <Section id="registrations">
-          <div className="col-lg-6 col-xl-4 mx-auto mb-5">
+          <div className="col-lg-6 col-xl-4 col-md-9 mx-auto mb-5">
             <h1 className="fw-bold text-center">Register</h1>
             <div
               dangerouslySetInnerHTML={{

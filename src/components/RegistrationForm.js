@@ -289,10 +289,17 @@ export default function RegistrationForm({
                 </Label>
                 {isAfricanCountry && !can_pay && (
                   <div className="my-2">
-                    <Label for="price_slided">
-                      <strong>Sliding scale price</strong>
-                    </Label>
-                    <p>{sliding_scale.intro}</p>
+                    <Label for="price_slided">{sliding_scale.intro}</Label>
+                    <div className="d-flex justify-content-between">
+                      <small className="text-body-tertiary">
+                        {sliding_scale.min}
+                        {currency.symbol}
+                      </small>
+                      <small className="text-body-tertiary">
+                        {sliding_scale.max}
+                        {currency.symbol}
+                      </small>
+                    </div>
                     <div className="col-12">
                       <Field
                         type="range"
@@ -304,8 +311,11 @@ export default function RegistrationForm({
                         step={sliding_scale.step}
                       />
                       <div className="mb-3">
-                        {price_slided}
-                        {currency.symbol}
+                        You have chosen{' '}
+                        <strong>
+                          {price_slided}
+                          {currency.symbol}
+                        </strong>
                       </div>
                     </div>
                   </div>
