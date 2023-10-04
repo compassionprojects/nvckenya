@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field, ErrorMessage, useFormikContext } from 'formik';
 import { FormGroup, Label, Button } from 'reactstrap';
 import { object, string, boolean, number } from 'yup';
 import classnames from 'classnames';
@@ -283,6 +283,8 @@ export default function RegistrationForm({
               </FormGroup>
             </div>
 
+            <CountryDefault onCountrySelect={onCountrySelect} />
+
             <div className="col-12">
               <FormGroup check>
                 <Field
@@ -456,3 +458,27 @@ function createNumberArray(min, max, step) {
   }
   return result;
 }
+
+function CountryDefault({ onCountrySelect }) {
+  const { setFieldValue } = useFormikContext();
+  useEffect(() => {
+    // if (process.env.NODE_ENV === 'development') return;
+
+    async function getCountryData() {
+      const {
+        data: { countryCode },
+      } = await axios.get('/api/get_country');
+      return countryCode;
+    }
+
+    getCountryData().then((c) => {
+      setFieldValue('country', c);
+      onCountrySelect(c);
+    });
+  }, []);
+  return null;
+}
+
+CountryDefault.propTypes = {
+  onCountrySelect: PropTypes.func,
+};
