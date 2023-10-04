@@ -33,7 +33,7 @@ let paymentSchema = object({
     .required(),
   can_pay: boolean().required(),
   slided_price: number().optional(),
-  scholarship_support: boolean().required(),
+  need_scholarship: boolean().required(),
   payment_method: string()
     .oneOf(payment_methods.map((t) => t.method))
     .optional(),
@@ -51,7 +51,7 @@ const initialValues = {
   can_pay: true,
   slided_price: 0,
   payment_method: DEFAULT_PAYMENT_METHOD,
-  scholarship_support: false,
+  need_scholarship: false,
 };
 
 export default function RegistrationForm({
@@ -159,7 +159,7 @@ export default function RegistrationForm({
           isValid,
           setFieldTouched,
           setFieldValue,
-          values: { can_pay, payment_method, scholarship_support },
+          values: { can_pay, payment_method, need_scholarship },
         }) => (
           <Form
             method="post"
@@ -260,7 +260,7 @@ export default function RegistrationForm({
                     setFieldTouched('country', true);
                     setFieldValue('country', code);
                     setFieldValue('can_pay', true);
-                    setFieldValue('scholarship_support', false);
+                    setFieldValue('need_scholarship', false);
                     if (isAfrica(code)) {
                       setFieldValue(
                         'slided_price',
@@ -283,7 +283,7 @@ export default function RegistrationForm({
               </FormGroup>
             </div>
 
-            <CountryDefault onCountrySelect={onCountrySelect} />
+            <FieldCountryDefault onCountrySelect={onCountrySelect} />
 
             <div className="col-12">
               <FormGroup check>
@@ -294,7 +294,8 @@ export default function RegistrationForm({
                   className="form-check-input"
                 />{' '}
                 <Label for="can_pay">
-                  Yes, I can contribute {activeTier[pricingField]}
+                  Yes, I am able to contribute and pay{' '}
+                  {activeTier[pricingField]}
                 </Label>
               </FormGroup>
             </div>
@@ -356,23 +357,23 @@ export default function RegistrationForm({
                   <FormGroup check>
                     <Field
                       type="checkbox"
-                      name="scholarship_support"
-                      id="scholarship_support"
+                      name="need_scholarship"
+                      id="need_scholarship"
                       className="form-check-input"
                     />{' '}
-                    <Label for="scholarship_support">
-                      I need scholarship support
+                    <Label for="need_scholarship">
+                      I need support with a scholarship
                     </Label>
+                    {need_scholarship && (
+                      <div
+                        className="my-2"
+                        dangerouslySetInnerHTML={{
+                          __html: scholarship_info,
+                        }}
+                      />
+                    )}
                   </FormGroup>
                 </div>
-                {scholarship_support && (
-                  <div
-                    className="my-2"
-                    dangerouslySetInnerHTML={{
-                      __html: scholarship_info,
-                    }}
-                  />
-                )}
               </>
             )}
 
@@ -459,7 +460,7 @@ function createNumberArray(min, max, step) {
   return result;
 }
 
-function CountryDefault({ onCountrySelect }) {
+function FieldCountryDefault({ onCountrySelect }) {
   const { setFieldValue } = useFormikContext();
   useEffect(() => {
     // if (process.env.NODE_ENV === 'development') return;
@@ -479,6 +480,6 @@ function CountryDefault({ onCountrySelect }) {
   return null;
 }
 
-CountryDefault.propTypes = {
+FieldCountryDefault.propTypes = {
   onCountrySelect: PropTypes.func,
 };
