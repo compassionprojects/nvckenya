@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Formik, Form, Field, ErrorMessage, useFormikContext } from 'formik';
+import {
+  Formik,
+  Form,
+  Field,
+  ErrorMessage,
+  useFormikContext,
+  getIn,
+} from 'formik';
 import { FormGroup, Label, Button } from 'reactstrap';
 import { object, string, boolean, number } from 'yup';
 import classnames from 'classnames';
@@ -55,9 +62,37 @@ const initialValues = {
   price_slided: 0,
 };
 
+// changes based on
+//  - can_pay
+//  - country
+//  - price_slided
+function createOrderItems(activeTier, values) {
+  const items = [];
+  // 1) if opted for accommodation append that
+  if (values.need_accommodation) {
+    items.push({
+      name: 'Accommodation fee',
+      amount: parseInt(activeTier.price_accommodation, 10),
+    });
+  }
+
+  // 2) append tuition fee based on parity pricing
+  const _isAfrica = isAfrica(values.country);
+  let tuitionPrice = activeTier[_isAfrica ? 'parity_price' : 'price'];
+  // if african country, consider slided price
+  if (_isAfrica && !values.can_pay) {
+    tuitionPrice = values.price_slided;
+  }
+  items.push({
+    name: `Tuition fee - ${activeTier.title}`,
+    amount: parseInt(tuitionPrice, 10),
+  });
+
+  return items;
+}
+
 export default function RegistrationForm({
   terms_url,
-  order_item,
   onSubmit,
   tiers,
   sliding_scale,
@@ -87,13 +122,14 @@ export default function RegistrationForm({
   const [activeTier] = _tiers.filter((t) => t.isActive);
 
   const handleSubmit = async (values, { setSubmitting }) => {
-    // @todo: calculate total price, consider sliding scale, donation amount and accommodation price
-    const totalPrice = activeTier[pricingField];
+    // create order items, there can be only two 1) accommodation 2) tuition
+    const items = createOrderItems(activeTier, values);
 
+    // create the final form data
     const formData = {
       ...values,
-      price: totalPrice,
-      order_item: `${order_item} - ${activeTier.title}`,
+      totalPrice: items.reduce((sum, x) => sum + x.amount, 0),
+      items,
       'form-name': FORM_NAME,
     };
 
@@ -432,6 +468,8 @@ export default function RegistrationForm({
               </FormGroup>
             </div>
 
+            <DisplayTotal activeTier={activeTier} currency={currency} />
+
             <div className="mt-3">
               <Button
                 size="lg"
@@ -456,7 +494,6 @@ export default function RegistrationForm({
 
 RegistrationForm.propTypes = {
   terms_url: PropTypes.string,
-  order_item: PropTypes.string,
   onSubmit: PropTypes.func,
   tiers: PropTypes.array,
   sliding_scale: PropTypes.object,
@@ -504,3 +541,43 @@ function transformTier(t) {
       : `Until ${format(new Date(t.end_date), 'dd MMM yyyy')}`, // present
   };
 }
+
+function DisplayTotal({ activeTier, currency }) {
+  const [items, setItems] = useState([]);
+  const { values } = useFormikContext();
+
+  const can_pay = getIn(values, 'can_pay');
+  const country = getIn(values, 'country');
+  const need_accommodation = getIn(values, 'need_accommodation');
+  const price_slided = getIn(values, 'price_slided');
+
+  useEffect(() => {
+    setItems(createOrderItems(activeTier, values));
+  }, [can_pay, country, need_accommodation, price_slided]);
+
+  return (
+    <div className=" my-4">
+      {items.map((item, idx) => (
+        <div className="d-flex justify-content-between" key={idx}>
+          <span>{item.name}</span>
+          <span>
+            {item.amount}
+            {currency.symbol}
+          </span>
+        </div>
+      ))}
+      <div className="d-flex justify-content-between border-top mt-2 pt-2">
+        <span>Total payable</span>
+        <span>
+          {items.reduce((sum, x) => sum + x.amount, 0)}
+          {currency.symbol}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+DisplayTotal.propTypes = {
+  activeTier: PropTypes.object,
+  currency: PropTypes.object,
+};

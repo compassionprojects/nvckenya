@@ -351,7 +351,6 @@ export default function Home({ data }) {
 
             <RegistrationForm
               terms_url={registration.terms_url}
-              order_item={title}
               tiers={tiers}
               sliding_scale={sliding_scale}
               scholarship_info={marked(scholarship_info)}
