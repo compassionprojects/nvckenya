@@ -14,6 +14,7 @@ import {
   Button,
   InputGroup,
   InputGroupText,
+  Alert,
 } from 'reactstrap';
 import { object, string, boolean, number } from 'yup';
 import classnames from 'classnames';
@@ -87,6 +88,8 @@ export default function RegistrationForm({
   // we give discounts through parity pricing and sliding scale for african countries
   const [isAfricanCountry, setIsAfricanCountry] = useState(false);
 
+  const [failure, setFailure] = useState([]);
+
   // to show the actual price or the parity price
   // - price is the default field which displays actual price
   // - parity_price is the field which displays parity prices for discounted countries
@@ -106,6 +109,8 @@ export default function RegistrationForm({
   const [activeTier] = _tiers.filter((t) => t.isActive);
 
   const handleSubmit = async (values, { setSubmitting }) => {
+    setFailure([]);
+
     // create order items, there can be only two 1) accommodation 2) tuition
     const items = createOrderItems(activeTier, values);
 
@@ -118,19 +123,24 @@ export default function RegistrationForm({
       'form-name': FORM_NAME,
     };
 
-    console.log(formData);
+    const errors = [];
 
     // skip for development or if last name is testing
-    /* if (
+    if (
       process.env.NODE_ENV !== 'development' &&
       !values.last_name.toLowerCase().includes('testing')
     ) {
-      await axios.post('/', formData, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      });
+      try {
+        await axios.post('/', formData, {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        });
+      } catch (e) {
+        console.log(e);
+        errors.push('Registration failed');
+      }
     } else {
       console.log(formData);
-    } */
+    }
 
     // if not bank_transfer or mobile_money_transfer create order
     if (
@@ -143,14 +153,19 @@ export default function RegistrationForm({
         } = await axios.post('/api/create_order', formData);
         // redirect user to data.paymentUrl
         window.location = paymentUrl.href;
+        return;
       } catch (error) {
         console.log(error);
-        alert(
-          'There is some issue in creating your order but nothing to worry about, we have received your registration and we will send you the payment link to your email',
-        );
+        errors.push('Creating your order failed');
       }
-    } else {
+    } else if (errors.length === 0) {
+      // only if we've received their registration then redirect
       window.location = `/confirmation?need_scholarship=${values.need_scholarship}&payment_method=${values.payment_method}`;
+      return;
+    }
+
+    if (errors.length > 0) {
+      setFailure(errors.concat('Please consider trying again in some time'));
     }
 
     setSubmitting(false);
@@ -505,6 +520,16 @@ export default function RegistrationForm({
                 </div>
               )}
             </div>
+
+            {failure.length > 0 && (
+              <Alert color="danger" className="mt-4">
+                <ul className="m-0">
+                  {failure.map((msg, idx) => (
+                    <li key={idx}>{msg}</li>
+                  ))}
+                </ul>
+              </Alert>
+            )}
           </Form>
         )}
       </Formik>

@@ -59,12 +59,9 @@ export default function Confirmation({ data }) {
         {paymentMethod && (
           <div>
             <strong>Payment</strong>
-            <div
-              className="my-2"
-              dangerouslySetInnerHTML={{
-                __html: marked(payment_options[paymentMethod]),
-              }}
-            />
+            <div className="my-2 respect-newlines">
+              {payment_options[paymentMethod]}
+            </div>
           </div>
         )}
         <div className="mb-5 mt-3 text-center">
