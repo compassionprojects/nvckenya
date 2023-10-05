@@ -30,3 +30,13 @@ table {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.respect-newlines {
+  white-space: pre-wrap;
+}
+
+input[type=number].money::-webkit-inner-spin-button,
+input[type=number].money::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

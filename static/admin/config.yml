@@ -28,9 +28,13 @@ collections:
         widget: text
       - name: start_date
         label: Start date
+        date_format: "dd/MM/yyyy"
+        time_format: false
         widget: datetime
       - name: end_date
         label: End date
+        date_format: "dd/MM/yyyy"
+        time_format: false
         widget: datetime
       - name: contact_email
         label: Contact email
@@ -109,6 +113,94 @@ collections:
           - name: seo_image
             label: SEO Image
             widget: image
+      - name: registration
+        label: Registration
+        widget: object
+        required: false
+        fields:
+          - name: text
+            label: Registration form text
+            widget: text
+          - name: terms_url
+            label: Terms and conditions link
+            widget: string
+      - name: currency
+        label: Currency
+        widget: object
+        required: false
+        fields:
+          - name: short_name
+            label: Short name
+            widget: string
+            hint: "For example: EUR, USD"
+          - name: symbol
+            label: Symbol
+            widget: string
+            hint: "For example: €, $"
+      - name: tiers
+        label: Pricing tiers
+        widget: list
+        fields:
+          - name: title
+            label: Title
+            widget: string
+            hint: "Name for the pricing tier (e.g: Early bird)"
+          - name: price
+            label: Price
+            widget: number
+          - name: parity_price
+            label: Parity Price
+            widget: number
+          - name: price_accommodation
+            label: Accommodation price
+            widget: number
+          - name: start_date
+            label: Date
+            widget: datetime
+            date_format: "dd/MM/yyyy"
+            time_format: false
+            hint: "Date from which this tier starts"
+          - name: end_date
+            label: Date
+            widget: datetime
+            date_format: "dd/MM/yyyy"
+            time_format: false
+            hint: "Date until which this tier is valid"
+      - name: sliding_scale
+        label: Sliding scale
+        widget: object
+        required: false
+        fields:
+          - name: intro
+            label: Intro
+            widget: text
+          - name: min
+            label: Minimum price
+            widget: number
+          - name: max
+            label: Maximum price
+            widget: number
+          - name: step
+            label: Step
+            widget: number
+      - name: scholarship_info
+        label: Scholarship Information
+        widget: markdown
+      - name: payment_options
+        label: Payment options
+        widget: object
+        required: false
+        fields:
+          - name: bank_transfer
+            title: Direct Bank transfer information
+            widget: text
+            hint: Should contain bank account details
+          - name: mobile_money_transfer
+            title: Mobile money transfer
+            widget: text
+      - name: confirmation_message
+        label: Thank you message
+        widget: markdown
 
   - name: team
     label: Team

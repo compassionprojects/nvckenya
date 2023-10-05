@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import classnames from 'classnames';
-import { marked } from 'marked';
+import marked from '../lib/marked';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import format from 'date-fns/format';
-import Footer from '../components/Footer';
+
 import Nav from '../components/Nav';
+import RegistrationForm from '../components/RegistrationForm';
 
 // get the latest retreat by sorting latest
 export const query = graphql`
@@ -44,12 +45,39 @@ export const query = graphql`
             organisers
             travel
           }
+          registration {
+            text
+            terms_url
+          }
+          tiers {
+            title
+            price
+            parity_price
+            start_date
+            end_date
+            price_accommodation
+          }
+          currency {
+            short_name
+            symbol
+          }
           seo {
             seo_title
             seo_description
             seo_image {
               publicURL
             }
+          }
+          sliding_scale {
+            min
+            max
+            step
+            intro
+          }
+          scholarship_info
+          payment_options {
+            bank_transfer
+            mobile_money_transfer
           }
         }
       }
@@ -89,6 +117,12 @@ export default function Home({ data }) {
     start_date,
     end_date,
     city,
+    registration,
+    tiers,
+    sliding_scale,
+    scholarship_info,
+    payment_options,
+    currency,
   } = data.allRetreatsYaml.edges[0].node;
   const people = data.allTeamYaml.edges.map((e) => e.node);
   const trainers = people.filter((p) => program.trainers.includes(p.user_id));
@@ -147,7 +181,7 @@ export default function Home({ data }) {
           </p>
           <div
             dangerouslySetInnerHTML={{
-              __html: marked.parse(person.bio || ''),
+              __html: marked(person.bio || ''),
             }}
           />
         </ModalBody>
@@ -169,7 +203,7 @@ export default function Home({ data }) {
           <div className="col-lg-6 mx-auto my-3">
             <div
               dangerouslySetInnerHTML={{
-                __html: marked.parse(program.introduction),
+                __html: marked(program.introduction),
               }}
             />
           </div>
@@ -177,7 +211,7 @@ export default function Home({ data }) {
             <h2 className="text-center">Goals</h2>
             <div
               dangerouslySetInnerHTML={{
-                __html: marked.parse(program.goals),
+                __html: marked(program.goals),
               }}
             />
           </div>
@@ -226,7 +260,7 @@ export default function Home({ data }) {
           <h1 className="text-center fw-bold">Pricing</h1>
           <div
             className="col-lg-6 mx-auto my-3"
-            dangerouslySetInnerHTML={{ __html: marked.parse(program.pricing) }}
+            dangerouslySetInnerHTML={{ __html: marked(program.pricing) }}
           />
           <div className="text-center mt-5 mb-4">
             <Register />
@@ -241,7 +275,7 @@ export default function Home({ data }) {
           <div
             className="col-lg-6 mx-auto my-3"
             dangerouslySetInnerHTML={{
-              __html: marked.parse(program.cancellation_policy),
+              __html: marked(program.cancellation_policy),
             }}
           />
           <div className="text-center mt-5 mb-4">
@@ -255,7 +289,7 @@ export default function Home({ data }) {
           <div className="col-lg-6 mx-auto my-3">
             <div
               dangerouslySetInnerHTML={{
-                __html: marked.parse(program.accommodation_details),
+                __html: marked(program.accommodation_details),
               }}
             />
           </div>
@@ -273,7 +307,7 @@ export default function Home({ data }) {
                 <h2>Facilities</h2>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: marked.parse(program.facilities),
+                    __html: marked(program.facilities),
                   }}
                 />
               </div>
@@ -281,7 +315,7 @@ export default function Home({ data }) {
                 <h2>Location</h2>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: marked.parse(program.location),
+                    __html: marked(program.location),
                   }}
                 />
               </div>
@@ -298,7 +332,7 @@ export default function Home({ data }) {
           <div className="col-lg-6 mx-auto my-3">
             <div
               dangerouslySetInnerHTML={{
-                __html: marked.parse(program.travel),
+                __html: marked(program.travel),
               }}
             />
           </div>
@@ -306,19 +340,21 @@ export default function Home({ data }) {
 
         {/* Registrations */}
         <Section id="registrations">
-          <h1 className="text-center fw-bold">Register</h1>
-          <div className="col-lg-6 mx-auto my-3 text-center mb-4">
-            <p>
-              Registrations will soon be open, in the meantime if you have
-              questions, you may contact us
-            </p>
-            <a href={`mailto:${contact_email}`} className="btn btn-secondary">
-              Contact us
-            </a>
+          <div className="col-lg-6 col-xl-4 col-md-9 mx-auto mb-5">
+            <h1 className="fw-bold text-center">Register</h1>
+
+            <RegistrationForm
+              terms_url={registration.terms_url}
+              tiers={tiers}
+              sliding_scale={sliding_scale}
+              scholarship_info={marked(scholarship_info)}
+              payment_options={payment_options}
+              currency={currency}
+              contact_email={contact_email}
+              registration_info={marked(registration.text)}
+            />
           </div>
         </Section>
-
-        <Footer />
       </div>
     </>
   );
@@ -336,18 +372,18 @@ export const Head = ({ data }) => {
   return (
     <>
       <html lang="en" />
-      <body className="nvckenya" />
       <title>{seo_title}</title>
       <meta name="description" content={seo_description} />
       <meta
         name="keywords"
         content={`event, retreat, ${city}, kenya, nonviolent communication, nvc, compassion, self care, wellbeing`}
       />
-
       <meta property="og:title" content={seo_title} />
       <meta property="og:description" content={seo_description} />
       <meta property="og:image" content={seo_image.publicURL} />
       <meta property="og:url" content={data.site.siteMetadata.siteUrl} />
+
+      <body className="nvckenya" />
     </>
   );
 };
