@@ -3,7 +3,7 @@ const mollieClient = require('../lib/mollie');
 const { siteUrl } = require('../../gatsby-config');
 const isDev = process.env.NODE_ENV === 'development';
 
-const host = isDev ? 'https://1120-91-214-67-151.ngrok-free.app' : siteUrl;
+const host = isDev ? 'https://06df-81-22-39-169.ngrok-free.app' : siteUrl;
 
 const VAT_RATE = 19; // 19% for Germany
 const CURRENCY = 'EUR';
@@ -18,33 +18,47 @@ export default async function handler(req, res) {
     city,
     post_code,
     country,
-    price,
-    order_item,
+    totalPrice,
+    items,
+    // price,
+    // can_pay,
+    // price_slided,
+    // need_accommodation,
+    need_scholarship,
+    // can_donate,
+    // donation_amount,
+    // activeTier,
   } = req.body;
 
-  const amount = {
-    value: price.toFixed(2),
+  const totalAmount = {
+    value: totalPrice.toFixed(2),
     currency: CURRENCY,
   };
 
-  const orderObject = {
-    amount,
-    orderNumber: createOrderId(),
-    lines: [
-      {
-        type: 'digital',
-        name: order_item,
-        productUrl: siteUrl,
-        quantity: 1,
-        vatRate: VAT_RATE.toFixed(2),
-        unitPrice: amount,
-        totalAmount: amount,
-        vatAmount: {
-          currency: CURRENCY,
-          value: (amount.value * (VAT_RATE / (100 + VAT_RATE))).toFixed(2),
-        },
+  const lines = items.map((item) => {
+    const amt = {
+      value: item.amount.toFixed(2),
+      currency: CURRENCY,
+    };
+    return {
+      type: 'digital',
+      name: item.name,
+      productUrl: siteUrl,
+      quantity: 1,
+      vatRate: VAT_RATE.toFixed(2),
+      unitPrice: amt,
+      totalAmount: amt,
+      vatAmount: {
+        currency: CURRENCY,
+        value: (amt.value * (VAT_RATE / (100 + VAT_RATE))).toFixed(2),
       },
-    ],
+    };
+  });
+
+  const orderObject = {
+    amount: totalAmount,
+    orderNumber: createOrderId(),
+    lines,
     billingAddress: {
       streetAndNumber: address,
       city,
@@ -55,13 +69,12 @@ export default async function handler(req, res) {
       email,
     },
     locale: LOCALE,
-    redirectUrl: `${host}/processing`,
+    redirectUrl: `${host}/confirmation?need_scholarship=${need_scholarship}`,
     webhookUrl: `${host}/api/webhook`,
   };
 
   try {
     const order = await mollieClient.orders.create(orderObject);
-    console.log(order);
     res.status(200).json({ paymentUrl: order._links.checkout });
   } catch (e) {
     console.log(e);

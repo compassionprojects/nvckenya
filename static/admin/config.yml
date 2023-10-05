@@ -198,6 +198,9 @@ collections:
           - name: mobile_money_transfer
             title: Mobile money transfer
             widget: text
+      - name: confirmation_message
+        label: Thank you message
+        widget: markdown
 
   - name: team
     label: Team

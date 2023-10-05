@@ -326,3 +326,5 @@ payment_options:
     Account number 1320124941
 
     Once you pay via mobile money send a confirmation message to +254 727715375/ +254 725159978 or call the number for any payment assistance.
+confirmation_message: >
+  Thank you for choosing to come join us. We will send you a confirmation email and follow up. In the mean time if you have any questions, feel free to contact us.

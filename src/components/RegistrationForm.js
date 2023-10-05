@@ -22,6 +22,7 @@ import isBefore from 'date-fns/isBefore';
 import isAfter from 'date-fns/isAfter';
 import format from 'date-fns/format';
 import { countries, countryCodes, isAfrica } from '../lib/countries';
+import { createOrderItems } from '../lib/order';
 
 const FORM_NAME = 'registration';
 const DEFAULT_PAYMENT_METHOD = 'mollie';
@@ -71,63 +72,6 @@ const initialValues = {
   price_slided: 0,
   donation_amount: 5,
 };
-
-// changes based on the 2nd argument
-//  activeTier: {
-//    date: 2023-10-25,
-//    title: Early bird,
-//    price: "1699",
-//    start_date: 2023-10-02,
-//    end_date: 2023-10-25,
-//    parity_price: "500",
-//    price_accommodation: "380",
-//    displayDate: '...',
-//    isActive: true,
-//  }
-function createOrderItems(
-  activeTier,
-  {
-    country,
-    can_pay,
-    price_slided,
-    need_accommodation,
-    can_donate,
-    donation_amount,
-  },
-) {
-  const items = [];
-
-  // 1) append tuition fee based on parity pricing
-  const _isAfrica = isAfrica(country);
-  let tuitionPrice = activeTier[_isAfrica ? 'parity_price' : 'price'];
-  // if african country, consider slided price
-  if (_isAfrica && !can_pay) {
-    tuitionPrice = price_slided;
-  }
-  items.push({
-    name: `Tuition fee - ${activeTier.title}`,
-    amount: parseInt(tuitionPrice, 10),
-  });
-
-  // 2) if opted for accommodation append that
-  if (need_accommodation) {
-    items.push({
-      name: 'Accommodation fee',
-      amount: parseInt(activeTier.price_accommodation, 10),
-    });
-  }
-
-  // 3) if opted for donating to scholarship funds, append that
-  const donationAmount = parseInt(donation_amount, 10);
-  if (can_donate && donationAmount > 0) {
-    items.push({
-      name: 'Donation to scholarship funds',
-      amount: donationAmount,
-    });
-  }
-
-  return items;
-}
 
 export default function RegistrationForm({
   registration_info,
@@ -189,9 +133,25 @@ export default function RegistrationForm({
     } */
 
     // if not bank_transfer or mobile_money_transfer create order
-    // const { data } = await axios.post('/api/create_order', formData);
-    // alert(JSON.stringify(data, null, 2));
-    // redirect user to data.paymentUrl
+    if (
+      (isAfricanCountry && values.payment_method === DEFAULT_PAYMENT_METHOD) ||
+      !isAfricanCountry
+    ) {
+      try {
+        const {
+          data: { paymentUrl },
+        } = await axios.post('/api/create_order', formData);
+        // redirect user to data.paymentUrl
+        window.location = paymentUrl.href;
+      } catch (error) {
+        console.log(error);
+        alert(
+          'There is some issue in creating your order but nothing to worry about, we have received your registration and we will send you the payment link to your email',
+        );
+      }
+    } else {
+      window.location = `/confirmation?need_scholarship=${values.need_scholarship}&payment_method=${values.payment_method}`;
+    }
 
     setSubmitting(false);
     onSubmit && onSubmit(formData);

@@ -1,11 +1,15 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import Footer from '../components/Footer';
 import './layout.scss';
 
 const Layout = ({ children }) => {
   return (
     <div className="container-fluid">
-      <main>{children}</main>
+      <main>
+        {children}
+        <Footer />
+      </main>
     </div>
   );
 };

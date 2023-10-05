@@ -7,7 +7,6 @@ import marked from '../lib/marked';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import format from 'date-fns/format';
 
-import Footer from '../components/Footer';
 import Nav from '../components/Nav';
 import RegistrationForm from '../components/RegistrationForm';
 
@@ -356,8 +355,6 @@ export default function Home({ data }) {
             />
           </div>
         </Section>
-
-        <Footer />
       </div>
     </>
   );
