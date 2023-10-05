@@ -228,6 +228,9 @@ registration:
     your email. We will send you another form after the payment to better
     understand and serve you during the retreat. "
   terms_url: https://docs.google.com/document/d/1F420RQNovXq86vrdj30HHp5lmChHdygfypiIm-0dSkk/edit?usp=sharing
+currency:
+  short_name: EUR
+  symbol: €
 tiers:
   - date: 2023-10-25
     title: Early bird
@@ -243,9 +246,6 @@ tiers:
     end_date: 2023-12-01
     parity_price: "600"
     price_accommodation: "380"
-currency:
-  short_name: EUR
-  symbol: €
 sliding_scale:
   intro: If the above local tuition fee is more than you can contribute please use
     the sliding scale below to choose a price you can afford
@@ -256,8 +256,8 @@ scholarship_info: >
   If you still aren't able to pay and contribute, please apply for a
   scholarship. We will do our best to accommodate all applications, while we
   also acknowledge that we have limited resources available. Please fill out
-  this [request for scholarship form](https://forms.gle/Z8bAc5xEJnSXDZLw8)
-  once you complete registration.
+  this [scholarship request form](https://forms.gle/Z8bAc5xEJnSXDZLw8) once you
+  complete registration.
 payment_options:
   bank_transfer: |-
     Please make a transfer to the following account now or after registration
@@ -278,4 +278,6 @@ payment_options:
 
     Once you pay via mobile money send a confirmation message to +254 727715375/ +254 725159978 or call the number for any payment assistance.
 confirmation_message: >
-  Thank you for choosing to come join us. We will send you a confirmation email and follow up. In the mean time if you have any questions, feel free to contact us.
+  Thank you for choosing to come join us. We will send you a confirmation email
+  and follow up. In the mean time if you have any questions, feel free to
+  contact us.
