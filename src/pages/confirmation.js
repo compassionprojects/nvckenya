@@ -77,3 +77,12 @@ export default function Confirmation({ data }) {
 Confirmation.propTypes = {
   data: PropTypes.object,
 };
+
+export const Head = () => {
+  return (
+    <>
+      <meta name="robots" content="noindex, nofollow" />
+      <title>Thank you</title>
+    </>
+  );
+};
