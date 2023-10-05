@@ -1,9 +1,7 @@
 const crypto = require('crypto');
 const mollieClient = require('../lib/mollie');
-const { siteUrl } = require('../../gatsby-config');
-const isDev = process.env.NODE_ENV === 'development';
 
-const host = isDev ? 'https://06df-81-22-39-169.ngrok-free.app' : siteUrl;
+const host = process.env.DOMAIN_HOST;
 
 const VAT_RATE = 0; // No vat for these courses
 const CURRENCY = 'EUR';
@@ -43,7 +41,7 @@ export default async function handler(req, res) {
     return {
       type: 'digital',
       name: item.name,
-      productUrl: siteUrl,
+      productUrl: host,
       quantity: 1,
       vatRate: VAT_RATE.toFixed(2),
       unitPrice: amt,
