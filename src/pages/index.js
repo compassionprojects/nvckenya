@@ -112,7 +112,7 @@ export default function Home({ data }) {
   const {
     title,
     intro,
-    // contact_email,
+    contact_email,
     hero_image,
     program,
     start_date,
@@ -343,11 +343,6 @@ export default function Home({ data }) {
         <Section id="registrations">
           <div className="col-lg-6 col-xl-4 col-md-9 mx-auto mb-5">
             <h1 className="fw-bold text-center">Register</h1>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: marked(registration.text),
-              }}
-            />
 
             <RegistrationForm
               terms_url={registration.terms_url}
@@ -356,6 +351,8 @@ export default function Home({ data }) {
               scholarship_info={marked(scholarship_info)}
               payment_options={payment_options}
               currency={currency}
+              contact_email={contact_email}
+              registration_info={marked(registration.text)}
             />
           </div>
         </Section>

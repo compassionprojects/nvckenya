@@ -124,6 +124,7 @@ function createOrderItems(
 }
 
 export default function RegistrationForm({
+  registration_info,
   terms_url,
   onSubmit,
   tiers,
@@ -131,6 +132,7 @@ export default function RegistrationForm({
   scholarship_info,
   payment_options,
   currency,
+  contact_email,
 }) {
   // we give discounts through parity pricing and sliding scale for african countries
   const [isAfricanCountry, setIsAfricanCountry] = useState(false);
@@ -188,8 +190,24 @@ export default function RegistrationForm({
     onSubmit && onSubmit(formData);
   };
 
+  // if there's no active tier, close the registration form
+  if (!activeTier) {
+    return (
+      <div className="text-center">
+        The registration for this event is closed. Please contact us if you have
+        any questions
+        <div className="my-5">
+          <a href={`mailto:${contact_email}`} className="btn btn-primary">
+            Contact us
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
+      <div dangerouslySetInnerHTML={{ __html: registration_info }} />
       <div className="d-flex gap-3 my-4 justify-content-center">
         {_tiers.map((t) => (
           <div
@@ -528,6 +546,7 @@ export default function RegistrationForm({
 }
 
 RegistrationForm.propTypes = {
+  registration_info: PropTypes.string,
   terms_url: PropTypes.string,
   onSubmit: PropTypes.func,
   tiers: PropTypes.array,
@@ -535,6 +554,7 @@ RegistrationForm.propTypes = {
   scholarship_info: PropTypes.string,
   payment_options: PropTypes.object,
   currency: PropTypes.object,
+  contact_email: PropTypes.string,
 };
 
 function FieldCountryDefault({ onCountrySelect }) {
