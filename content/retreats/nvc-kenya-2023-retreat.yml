@@ -243,54 +243,6 @@ tiers:
     end_date: 2023-12-01
     parity_price: "600"
     price_accommodation: "380"
-alternate_payment_options: >
-  Thank you for registering!  We've received your information. Here's how you
-  can pay now
-
-
-  **Sliding scale**
-
-
-  If the above local tuition fee is more than you can contribute please choose a price on this sliding scale:
-
-
-  € 100 - € 200 - € 300 - € 400 - € 500
-
-
-  If this is still more than you can contribute please apply for a scholarship. We will do our best to accommodate all applications, while we also acknowledge that we have limited resources available. Please fill out this [application form](https://docs.google.com/document/d/1mXJ7tlJNt6dLyvEieL53QP4f2T3mrBK6qesif_PxAbE/edit)
-
-
-  **Direct Transfer/Deposit to the NVC-Kenya Bank Account:**
-
-
-  _Bank Name: KCB Bank Kenya Limited_
-
-
-  _A/C Name: PatrobaStephenMary_
-
-
-  _A/C Number: 1320124941_
-
-
-  _Branch Name: Garden Plaza Mortage Centre_
-
-
-  _SwiftCode: KCBLKENX_
-
-
-  _Bank Code: 01_
-
-
-  _Branch Code: 290_
-
-
-  **Mobile Money Transfer:**
-
-
-  For people who would want to pay using mobile money, they will use the Paybill number **522522** and the account number **1320124941**. Once you pay via mobile money send the confirmation message to **+254 727715375/ +254 725159978.** or call the number for any payment assistance.
-
-
-  If you have further questions, please ask via mail: [kenyanvcretreat@gmail.com](mailto:kenyanvcretreat@gmail.com)
 currency:
   short_name: EUR
   symbol: €
@@ -304,9 +256,8 @@ scholarship_info: >
   If you still aren't able to pay and contribute, please apply for a
   scholarship. We will do our best to accommodate all applications, while we
   also acknowledge that we have limited resources available. Please fill out
-  this [application
-  form](https://docs.google.com/document/d/1mXJ7tlJNt6dLyvEieL53QP4f2T3mrBK6qesif_PxAbE/edit)
-  once you complete registration and send the form to us.
+  this [request for scholarship form](https://forms.gle/Z8bAc5xEJnSXDZLw8)
+  once you complete registration.
 payment_options:
   bank_transfer: |-
     Please make a transfer to the following account now or after registration
