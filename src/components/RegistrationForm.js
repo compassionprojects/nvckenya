@@ -552,19 +552,21 @@ RegistrationForm.propTypes = {
 function FieldCountryDefault({ onCountrySelect }) {
   const { setFieldValue } = useFormikContext();
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development') return;
+    // if (process.env.NODE_ENV === 'development') return;
 
     async function getCountryData() {
       const {
-        data: { countryCode },
+        data: { country_code },
       } = await axios.get('/api/get_country');
-      return countryCode;
+      return country_code;
     }
 
-    getCountryData().then((c) => {
-      setFieldValue('country', c);
-      onCountrySelect(c);
-    });
+    getCountryData()
+      .then((c) => {
+        setFieldValue('country', c);
+        onCountrySelect(c);
+      })
+      .catch((e) => console.log(e));
   }, []);
   return null;
 }
