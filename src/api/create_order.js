@@ -5,7 +5,7 @@ const isDev = process.env.NODE_ENV === 'development';
 
 const host = isDev ? 'https://06df-81-22-39-169.ngrok-free.app' : siteUrl;
 
-const VAT_RATE = 19; // 19% for Germany
+const VAT_RATE = 0; // No vat for these courses
 const CURRENCY = 'EUR';
 const LOCALE = 'en_GB';
 
@@ -55,22 +55,26 @@ export default async function handler(req, res) {
     };
   });
 
+  const billingAndShipping = {
+    streetAndNumber: address,
+    city,
+    postalCode: post_code,
+    country,
+    givenName: first_name,
+    familyName: last_name,
+    email,
+  };
+
   const orderObject = {
     amount: totalAmount,
     orderNumber: createOrderId(),
     lines,
-    billingAddress: {
-      streetAndNumber: address,
-      city,
-      postalCode: post_code,
-      country,
-      givenName: first_name,
-      familyName: last_name,
-      email,
-    },
+    billingAddress: billingAndShipping,
+    shippingAddress: billingAndShipping,
     locale: LOCALE,
     redirectUrl: `${host}/confirmation?need_scholarship=${need_scholarship}`,
     webhookUrl: `${host}/api/webhook`,
+    cancelUrl: host,
   };
 
   try {
