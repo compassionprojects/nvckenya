@@ -72,12 +72,18 @@ const initialValues = {
   donation_amount: 5,
 };
 
-// changes based on
-//  - can_pay
-//  - country
-//  - price_slided
-//  - donation_amount
-//  - can_donate
+// changes based on the 2nd argument
+//  activeTier: {
+//    date: 2023-10-25,
+//    title: Early bird,
+//    price: "1699",
+//    start_date: 2023-10-02,
+//    end_date: 2023-10-25,
+//    parity_price: "500",
+//    price_accommodation: "380",
+//    displayDate: '...',
+//    isActive: true,
+//  }
 function createOrderItems(
   activeTier,
   {
@@ -162,6 +168,7 @@ export default function RegistrationForm({
     // create the final form data
     const formData = {
       ...values,
+      activeTier,
       totalPrice: items.reduce((sum, x) => sum + x.amount, 0),
       items,
       'form-name': FORM_NAME,
