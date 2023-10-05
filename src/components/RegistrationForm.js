@@ -8,7 +8,13 @@ import {
   useFormikContext,
   getIn,
 } from 'formik';
-import { FormGroup, Label, Button } from 'reactstrap';
+import {
+  FormGroup,
+  Label,
+  Button,
+  InputGroup,
+  InputGroupText,
+} from 'reactstrap';
 import { object, string, boolean, number } from 'yup';
 import classnames from 'classnames';
 import axios from 'axios';
@@ -38,7 +44,9 @@ let paymentSchema = object({
     .oneOf([true], 'You must read and accept the Participants Agreement')
     .required(),
   can_pay: boolean().required(),
+  can_donate: boolean().optional(),
   price_slided: number().optional(),
+  donation_amount: number().optional(),
   need_scholarship: boolean().required(),
   need_accommodation: boolean().required(),
   payment_method: string()
@@ -56,37 +64,61 @@ const initialValues = {
   country: '',
   terms: false,
   can_pay: true,
+  can_donate: false,
   payment_method: DEFAULT_PAYMENT_METHOD,
   need_scholarship: false,
   need_accommodation: false,
   price_slided: 0,
+  donation_amount: 5,
 };
 
 // changes based on
 //  - can_pay
 //  - country
 //  - price_slided
-function createOrderItems(activeTier, values) {
+//  - donation_amount
+//  - can_donate
+function createOrderItems(
+  activeTier,
+  {
+    country,
+    can_pay,
+    price_slided,
+    need_accommodation,
+    can_donate,
+    donation_amount,
+  },
+) {
   const items = [];
-  // 1) if opted for accommodation append that
-  if (values.need_accommodation) {
+
+  // 1) append tuition fee based on parity pricing
+  const _isAfrica = isAfrica(country);
+  let tuitionPrice = activeTier[_isAfrica ? 'parity_price' : 'price'];
+  // if african country, consider slided price
+  if (_isAfrica && !can_pay) {
+    tuitionPrice = price_slided;
+  }
+  items.push({
+    name: `Tuition fee - ${activeTier.title}`,
+    amount: parseInt(tuitionPrice, 10),
+  });
+
+  // 2) if opted for accommodation append that
+  if (need_accommodation) {
     items.push({
       name: 'Accommodation fee',
       amount: parseInt(activeTier.price_accommodation, 10),
     });
   }
 
-  // 2) append tuition fee based on parity pricing
-  const _isAfrica = isAfrica(values.country);
-  let tuitionPrice = activeTier[_isAfrica ? 'parity_price' : 'price'];
-  // if african country, consider slided price
-  if (_isAfrica && !values.can_pay) {
-    tuitionPrice = values.price_slided;
+  // 3) if opted for donating to scholarship funds, append that
+  const donationAmount = parseInt(donation_amount, 10);
+  if (can_donate && donationAmount > 0) {
+    items.push({
+      name: 'Donation to scholarship funds',
+      amount: donationAmount,
+    });
   }
-  items.push({
-    name: `Tuition fee - ${activeTier.title}`,
-    amount: parseInt(tuitionPrice, 10),
-  });
 
   return items;
 }
@@ -426,6 +458,8 @@ export default function RegistrationForm({
               </FormGroup>
             </div>
 
+            <FieldDonation currency={currency} />
+
             {/*
 
           - if country is african
@@ -551,10 +585,19 @@ function TotalPayable({ activeTier, currency }) {
   const country = getIn(values, 'country');
   const need_accommodation = getIn(values, 'need_accommodation');
   const price_slided = getIn(values, 'price_slided');
+  const can_donate = getIn(values, 'can_donate');
+  const donation_amount = getIn(values, 'donation_amount');
 
   useEffect(() => {
     setItems(createOrderItems(activeTier, values));
-  }, [can_pay, country, need_accommodation, price_slided]);
+  }, [
+    can_pay,
+    country,
+    need_accommodation,
+    price_slided,
+    can_donate,
+    donation_amount,
+  ]);
 
   return (
     <div className=" my-4">
@@ -580,5 +623,68 @@ function TotalPayable({ activeTier, currency }) {
 
 TotalPayable.propTypes = {
   activeTier: PropTypes.object,
+  currency: PropTypes.object,
+};
+
+function FieldDonation({ currency }) {
+  const {
+    errors,
+    touched,
+    setFieldValue,
+    values: { can_donate },
+  } = useFormikContext();
+
+  const validate = (value) => {
+    if (!can_donate) return;
+    if (parseInt(value, 10) > 0) return;
+    return 'Please enter a valid donation amount';
+  };
+
+  // if can_donate is unset, set donation amount to 0 otherwise set it to
+  // the initial value
+  useEffect(() => {
+    setFieldValue(
+      'donation_amount',
+      !can_donate ? 0 : initialValues.donation_amount,
+    );
+  }, [can_donate]);
+
+  return (
+    <div className="col-12">
+      <FormGroup check>
+        <Field
+          type="checkbox"
+          name="can_donate"
+          id="can_donate"
+          className="form-check-input"
+        />{' '}
+        <Label for="can_donate">
+          I would enjoy supporting the scholarship funds by donating{' '}
+          <span className="text-body-tertiary">(optional)</span>
+        </Label>
+        {can_donate && (
+          <div className="col-6 mb-2">
+            <InputGroup>
+              <InputGroupText>{currency.symbol}</InputGroupText>
+              <Field
+                placeholder="Enter an amount"
+                name="donation_amount"
+                type="number"
+                min={1}
+                className={classnames('form-control money', {
+                  'is-invalid':
+                    errors.donation_amount && touched.donation_amount,
+                })}
+                validate={validate}
+              />
+            </InputGroup>
+          </div>
+        )}
+      </FormGroup>
+    </div>
+  );
+}
+
+FieldDonation.propTypes = {
   currency: PropTypes.object,
 };
