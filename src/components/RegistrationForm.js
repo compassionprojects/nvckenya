@@ -334,7 +334,13 @@ export default function RegistrationForm({
                     setFieldValue('need_scholarship', false);
                     if (isAfrica(code)) {
                       setFieldValue('price_slided', sliding_scale.max);
-                    } else setFieldValue('price_slided', 0);
+                      // @todo remove once credit card payments are accepted
+                      setFieldValue('payment_method', 'bank_transfer');
+                    } else {
+                      setFieldValue('price_slided', 0);
+                      // @todo remove once credit card payments are accepted
+                      setFieldValue('payment_method', DEFAULT_PAYMENT_METHOD);
+                    }
                     onCountrySelect(code);
                   }}
                   className={classnames('form-control', {
