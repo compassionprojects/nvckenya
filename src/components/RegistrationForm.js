@@ -435,7 +435,12 @@ export default function RegistrationForm({
                       name="payment_method"
                       className="form-control">
                       {payment_methods.map((t) => (
-                        <option value={t.method} key={t.method}>
+                        <option
+                          value={t.method}
+                          key={t.method}
+                          disabled={
+                            t.method === DEFAULT_PAYMENT_METHOD && 'disabled'
+                          }>
                           {t.name}
                         </option>
                       ))}
