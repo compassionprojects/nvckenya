@@ -166,6 +166,8 @@ export default function RegistrationForm({
 
     if (errors.length > 0) {
       setFailure(errors.concat('Please consider trying again in some time'));
+    } else {
+      window.location = `/confirmation?need_scholarship=${values.need_scholarship}&payment_method=${values.payment_method}`;
     }
 
     setSubmitting(false);
