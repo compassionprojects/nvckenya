@@ -138,6 +138,7 @@ export default function RegistrationForm({
     const canSaveToNetlify =
       process.env.NODE_ENV !== 'development' &&
       !values.last_name.toLowerCase().includes('testing');
+    const confirmationUrl = `/confirmation?need_scholarship=${values.need_scholarship}&payment_method=${values.payment_method}`;
     let paymentUrl;
 
     // create order in Mollie and get the payment url
@@ -149,9 +150,8 @@ export default function RegistrationForm({
       errors.push('Creating your order failed');
     }
 
-    if (shouldPayNow && errors.length === 0) {
-      window.location = paymentUrl;
-    } else if (canSaveToNetlify) {
+    // save all registrations in netlify forms for easy export
+    if (canSaveToNetlify) {
       try {
         await axios.post('/', formData, {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -160,14 +160,16 @@ export default function RegistrationForm({
         console.log(e);
         errors.push('Registration failed');
       }
+    }
+
+    if (errors.length === 0) {
+      window.location = shouldPayNow ? paymentUrl : confirmationUrl;
     } else {
       console.log(formData);
     }
 
     if (errors.length > 0) {
       setFailure(errors.concat('Please consider trying again in some time'));
-    } else {
-      window.location = `/confirmation?need_scholarship=${values.need_scholarship}&payment_method=${values.payment_method}`;
     }
 
     setSubmitting(false);

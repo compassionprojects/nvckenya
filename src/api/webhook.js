@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   const { id } = req.body;
   const order = await mollieClient.orders.get(id);
 
-  console.log(order);
+  // console.log(order);
   const succeeded = order.isPaid || order.isAuthorized;
 
   if (succeeded) {
