@@ -6,7 +6,7 @@ const host = process.env.DOMAIN_HOST;
 const VAT_RATE = 0; // No vat for these courses
 const CURRENCY = 'EUR';
 const LOCALE = 'en_GB';
-const EXPIRES_AT = '2023-12-01'; // on the day of the retreat
+const EXPIRES_AT = '2023-12-25'; // max 100 days from now
 
 export default async function handler(req, res) {
   const {

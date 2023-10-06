@@ -45,7 +45,7 @@ let paymentSchema = object({
   terms: boolean()
     .oneOf([true], 'You must read and accept the Participants Agreement')
     .required(),
-  can_pay: boolean().required(),
+  cannot_pay: boolean().required(),
   can_donate: boolean().optional(),
   price_slided: number().optional(),
   donation_amount: number().optional(),
@@ -65,7 +65,7 @@ const initialValues = {
   post_code: '',
   country: '',
   terms: false,
-  can_pay: true,
+  cannot_pay: false,
   can_donate: false,
   payment_method: DEFAULT_PAYMENT_METHOD,
   need_scholarship: false,
@@ -132,8 +132,9 @@ export default function RegistrationForm({
 
     const errors = [];
     const shouldPayNow =
-      (isAfricanCountry && values.payment_method === DEFAULT_PAYMENT_METHOD) ||
-      !isAfricanCountry;
+      ((isAfricanCountry && values.payment_method === DEFAULT_PAYMENT_METHOD) ||
+        !isAfricanCountry) &&
+      !values.need_scholarship;
     // skip for development or if last name is testing
     const canSaveToNetlify =
       process.env.NODE_ENV !== 'development' &&
@@ -223,7 +224,12 @@ export default function RegistrationForm({
           isValid,
           setFieldTouched,
           setFieldValue,
-          values: { can_pay, payment_method, need_scholarship, price_slided },
+          values: {
+            cannot_pay,
+            payment_method,
+            need_scholarship,
+            price_slided,
+          },
         }) => (
           <Form
             method="post"
@@ -324,7 +330,7 @@ export default function RegistrationForm({
                     setFieldTouched('country', true);
                     setFieldValue('country', code);
 
-                    setFieldValue('can_pay', true);
+                    setFieldValue('cannot_pay', false);
                     setFieldValue('need_scholarship', false);
                     if (isAfrica(code)) {
                       setFieldValue('price_slided', sliding_scale.max);
@@ -351,16 +357,16 @@ export default function RegistrationForm({
               <FormGroup check>
                 <Field
                   type="checkbox"
-                  name="can_pay"
-                  id="can_pay"
+                  name="cannot_pay"
+                  id="cannot_pay"
                   className="form-check-input"
                 />{' '}
-                <Label for="can_pay">
-                  Yes, I am able to contribute and pay{' '}
+                <Label for="cannot_pay">
+                  No, I am not able to contribute and pay{' '}
                   {activeTier[pricingField]}
                   {currency.symbol}
                 </Label>
-                {isAfricanCountry && !can_pay && (
+                {isAfricanCountry && cannot_pay && (
                   <div className="my-2">
                     <Label for="price_slided">{sliding_scale.intro}</Label>
                     <div className="d-flex justify-content-between">
@@ -392,7 +398,7 @@ export default function RegistrationForm({
                     </div>
                   </div>
                 )}
-                {!can_pay && (
+                {cannot_pay && (
                   <div className="col-12">
                     <FormGroup check>
                       <Field
@@ -418,7 +424,7 @@ export default function RegistrationForm({
               </FormGroup>
             </div>
 
-            {isAfricanCountry && (
+            {isAfricanCountry && !need_scholarship && (
               <>
                 <div className="col-12 mt-2">
                   <FormGroup floating>
@@ -508,7 +514,9 @@ export default function RegistrationForm({
               </FormGroup>
             </div>
 
-            <TotalPayable activeTier={activeTier} currency={currency} />
+            {!need_scholarship && (
+              <TotalPayable activeTier={activeTier} currency={currency} />
+            )}
 
             <div className="mt-3">
               <Button
@@ -519,11 +527,12 @@ export default function RegistrationForm({
                 disabled={isSubmitting || !isValid}>
                 Register
               </Button>
-              {payment_method === DEFAULT_PAYMENT_METHOD && (
-                <div className="mt-2 small text-body-tertiary text-center">
-                  You will be redirected to make payment
-                </div>
-              )}
+              {payment_method === DEFAULT_PAYMENT_METHOD &&
+                !need_scholarship && (
+                  <div className="mt-2 small text-body-tertiary text-center">
+                    You will be redirected to make payment
+                  </div>
+                )}
             </div>
 
             {failure.length > 0 && (
@@ -596,7 +605,7 @@ function TotalPayable({ activeTier, currency }) {
   const [items, setItems] = useState([]);
   const { values } = useFormikContext();
 
-  const can_pay = getIn(values, 'can_pay');
+  const cannot_pay = getIn(values, 'cannot_pay');
   const country = getIn(values, 'country');
   const need_accommodation = getIn(values, 'need_accommodation');
   const price_slided = getIn(values, 'price_slided');
@@ -606,7 +615,7 @@ function TotalPayable({ activeTier, currency }) {
   useEffect(() => {
     setItems(createOrderItems(activeTier, values));
   }, [
-    can_pay,
+    cannot_pay,
     country,
     need_accommodation,
     price_slided,

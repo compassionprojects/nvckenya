@@ -17,7 +17,7 @@ export function createOrderItems(
   activeTier,
   {
     country,
-    can_pay,
+    cannot_pay,
     price_slided,
     need_accommodation,
     can_donate,
@@ -30,7 +30,7 @@ export function createOrderItems(
   const _isAfrica = isAfrica(country);
   let tuitionPrice = activeTier[_isAfrica ? 'parity_price' : 'price'];
   // if african country, consider slided price
-  if (_isAfrica && !can_pay) {
+  if (_isAfrica && cannot_pay) {
     tuitionPrice = price_slided;
   }
   items.push({
