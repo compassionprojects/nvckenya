@@ -6,6 +6,7 @@ const host = process.env.DOMAIN_HOST;
 const VAT_RATE = 0; // No vat for these courses
 const CURRENCY = 'EUR';
 const LOCALE = 'en_GB';
+const EXPIRES_AT = '2023-12-01'; // on the day of the retreat
 
 export default async function handler(req, res) {
   const {
@@ -16,17 +17,10 @@ export default async function handler(req, res) {
     city,
     post_code,
     country,
-    totalPrice,
-    items,
-    // price,
-    // can_pay,
-    // price_slided,
-    // need_accommodation,
-    need_scholarship,
-    // can_donate,
-    // donation_amount,
-    // activeTier,
+    ...formData
   } = req.body;
+
+  const { totalPrice, items, need_scholarship } = formData;
 
   const totalAmount = {
     value: totalPrice.toFixed(2),
@@ -73,6 +67,8 @@ export default async function handler(req, res) {
     redirectUrl: `${host}/confirmation?need_scholarship=${need_scholarship}`,
     webhookUrl: `${host}/api/webhook`,
     cancelUrl: host,
+    expiresAt: EXPIRES_AT,
+    metadata: { ...formData, email },
   };
 
   try {

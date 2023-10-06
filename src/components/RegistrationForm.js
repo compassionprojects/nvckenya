@@ -85,6 +85,7 @@ export default function RegistrationForm({
   currency,
   contact_email,
 }) {
+  // @todo change naming from isAfrica to hasParity or hasDiscount
   // we give discounts through parity pricing and sliding scale for african countries
   const [isAfricanCountry, setIsAfricanCountry] = useState(false);
 
@@ -108,6 +109,12 @@ export default function RegistrationForm({
   // through above transformation, find out which tier is active
   const [activeTier] = _tiers.filter((t) => t.isActive);
 
+  // Registration process
+  // - we are going to create all orders in Mollie
+  //  - if order creation in Mollie fails then we post to netlify forms
+  //  - if payment_method is bank_transfer or mobile_money_transfer then
+  //    also we post to netlify forms
+
   const handleSubmit = async (values, { setSubmitting }) => {
     setFailure([]);
 
@@ -124,12 +131,27 @@ export default function RegistrationForm({
     };
 
     const errors = [];
-
+    const shouldPayNow =
+      (isAfricanCountry && values.payment_method === DEFAULT_PAYMENT_METHOD) ||
+      !isAfricanCountry;
     // skip for development or if last name is testing
-    if (
+    const canSaveToNetlify =
       process.env.NODE_ENV !== 'development' &&
-      !values.last_name.toLowerCase().includes('testing')
-    ) {
+      !values.last_name.toLowerCase().includes('testing');
+    let paymentUrl;
+
+    // create order in Mollie and get the payment url
+    try {
+      const { data } = await axios.post('/api/create_order', formData);
+      paymentUrl = data.paymentUrl.href;
+    } catch (error) {
+      console.log(error);
+      errors.push('Creating your order failed');
+    }
+
+    if (shouldPayNow && errors.length === 0) {
+      window.location = paymentUrl;
+    } else if (canSaveToNetlify) {
       try {
         await axios.post('/', formData, {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -140,28 +162,6 @@ export default function RegistrationForm({
       }
     } else {
       console.log(formData);
-    }
-
-    // if not bank_transfer or mobile_money_transfer create order
-    if (
-      (isAfricanCountry && values.payment_method === DEFAULT_PAYMENT_METHOD) ||
-      !isAfricanCountry
-    ) {
-      try {
-        const {
-          data: { paymentUrl },
-        } = await axios.post('/api/create_order', formData);
-        // redirect user to data.paymentUrl
-        window.location = paymentUrl.href;
-        return;
-      } catch (error) {
-        console.log(error);
-        errors.push('Creating your order failed');
-      }
-    } else if (errors.length === 0) {
-      // only if we've received their registration then redirect
-      window.location = `/confirmation?need_scholarship=${values.need_scholarship}&payment_method=${values.payment_method}`;
-      return;
     }
 
     if (errors.length > 0) {
@@ -319,6 +319,7 @@ export default function RegistrationForm({
                     const code = e.target.value;
                     setFieldTouched('country', true);
                     setFieldValue('country', code);
+
                     setFieldValue('can_pay', true);
                     setFieldValue('need_scholarship', false);
                     if (isAfrica(code)) {
