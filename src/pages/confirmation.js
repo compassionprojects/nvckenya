@@ -56,7 +56,7 @@ export default function Confirmation({ data }) {
             />
           </div>
         )}
-        {paymentMethod && (
+        {paymentMethod && payment_options[paymentMethod] && (
           <div>
             <strong>Payment</strong>
             <div className="my-2 respect-newlines">
