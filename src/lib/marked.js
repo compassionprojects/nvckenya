@@ -7,7 +7,9 @@ const linkRenderer = renderer.link;
 // https://github.com/markedjs/marked/issues/655#issuecomment-712380889
 renderer.link = (href, title, text) => {
   const localLink = href.startsWith(
-    `${location.protocol}//${location.hostname}`,
+    typeof window === 'undefined'
+      ? process.env.DOMAIN_HOST
+      : `${location.protocol}//${location.hostname}`,
   );
   const html = linkRenderer.call(renderer, href, title, text);
   return localLink
@@ -19,6 +21,5 @@ renderer.link = (href, title, text) => {
 };
 
 export default function (str) {
-  if (typeof window === 'undefined') return marked(str);
   return marked(str, { renderer });
 }
