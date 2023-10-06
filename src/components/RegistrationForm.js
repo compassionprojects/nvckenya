@@ -355,12 +355,7 @@ export default function RegistrationForm({
 
             <div className="col-12">
               <FormGroup check>
-                <Field
-                  type="checkbox"
-                  name="cannot_pay"
-                  id="cannot_pay"
-                  className="form-check-input"
-                />{' '}
+                <FieldCannotPay />{' '}
                 <Label for="cannot_pay">
                   No, I am not able to contribute and pay{' '}
                   {activeTier[pricingField]}
@@ -712,3 +707,23 @@ function FieldDonation({ currency }) {
 FieldDonation.propTypes = {
   currency: PropTypes.object,
 };
+
+function FieldCannotPay() {
+  const {
+    values: { cannot_pay },
+    setFieldValue,
+  } = useFormikContext();
+
+  useEffect(() => {
+    setFieldValue('need_scholarship', false);
+  }, [cannot_pay]);
+
+  return (
+    <Field
+      type="checkbox"
+      name="cannot_pay"
+      id="cannot_pay"
+      className="form-check-input"
+    />
+  );
+}
