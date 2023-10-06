@@ -31,7 +31,7 @@ const DEFAULT_PAYMENT_METHOD = 'mollie';
 const payment_methods = [
   { name: 'Credit or debit card', method: DEFAULT_PAYMENT_METHOD },
   { name: 'Direct Bank transfer', method: 'bank_transfer' },
-  { name: 'Mobile money transfer', method: 'mobile_money_transfer' },
+  { name: 'Mobile money transfer (Mpesa)', method: 'mobile_money_transfer' },
 ];
 
 let paymentSchema = object({
