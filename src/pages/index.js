@@ -239,7 +239,7 @@ export default function Home({ data }) {
           </div>
 
           <div className="col-lg-8 mx-auto my-5">
-            <h2 className="text-center">Organisers team</h2>
+            <h2 className="text-center">Organisers</h2>
             <div className="row mt-3">
               {organisers.map((organiser) => (
                 <Person
