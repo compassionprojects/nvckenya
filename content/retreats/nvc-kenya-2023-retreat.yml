@@ -252,11 +252,11 @@ sliding_scale:
   max: "500"
   step: "10"
 scholarship_info: >
-  If you still aren't able to pay and contribute, please apply for a
-  scholarship. We will do our best to accommodate all applications, while we
-  also acknowledge that we have limited resources available. Please fill out
-  this [scholarship request form](https://forms.gle/Z8bAc5xEJnSXDZLw8) once you
-  complete registration.
+  If you are not able to pay any tuition fee, please apply for a scholarship. We
+  will do our best to accommodate all applications, while we also acknowledge
+  that we have limited resources available. Please fill out this [scholarship
+  request form](https://forms.gle/Z8bAc5xEJnSXDZLw8) once you complete
+  registration.
 payment_options:
   bank_transfer: |-
     Please make a transfer to the following account now or after registration
