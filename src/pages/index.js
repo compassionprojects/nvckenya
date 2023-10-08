@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import classnames from 'classnames';
-import axios from 'axios';
-import marked from '../lib/marked';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import axios from 'axios';
+import requestIp from 'request-ip';
 import format from 'date-fns/format';
+import marked from '../lib/marked';
 
 import Nav from '../components/Nav';
 import RegistrationForm from '../components/RegistrationForm';
@@ -15,13 +16,11 @@ import RegistrationForm from '../components/RegistrationForm';
 
 export async function getServerData({ headers }) {
   try {
-    const { data } = await axios.get(
-      process.env.DOMAIN_HOST + '/api/get_country',
-      {
-        headers: Object.fromEntries(headers),
-      },
-    );
-    return { props: data, status: 200 };
+    const IP_API_URL = 'http://ip-api.com/json/';
+    const clientIp = requestIp.getClientIp({ headers });
+    const { data } = await axios.get(IP_API_URL + clientIp);
+    if (data.status === 'fail') throw new Error(data.message);
+    return { props: data.countryCode, status: 200 };
   } catch (error) {
     console.log(error.toString());
     return {
