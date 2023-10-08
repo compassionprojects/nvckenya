@@ -1,5 +1,4 @@
 export default async (req, { geo }) => {
-  console.log('am here');
   return Response.json({ country: geo?.country?.code });
 };
 
