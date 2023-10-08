@@ -17,7 +17,7 @@ import RegistrationForm from '../components/RegistrationForm';
 export async function getServerData() {
   try {
     const { data } = await axios.get(
-      process.env.DOMAIN_URL + '/.netlify/edge-functions/get_country',
+      process.env.DOMAIN_HOST + '/api/get_country',
     );
     return { props: data.country, status: 200 };
   } catch (error) {
