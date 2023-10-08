@@ -5,7 +5,7 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import classnames from 'classnames';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import axios from 'axios';
-import requestIp from 'request-ip';
+// import requestIp from 'request-ip';
 import format from 'date-fns/format';
 import marked from '../lib/marked';
 
@@ -14,13 +14,12 @@ import RegistrationForm from '../components/RegistrationForm';
 
 // @todo may be rename DOMAIN_HOST to BASE_URL
 
-export async function getServerData({ headers }) {
+export async function getServerData() {
   try {
-    const IP_API_URL = 'http://ip-api.com/json/';
-    const clientIp = requestIp.getClientIp({ headers });
-    const { data } = await axios.get(IP_API_URL + clientIp);
-    if (data.status === 'fail') throw new Error(data.message);
-    return { props: data.countryCode, status: 200 };
+    const { data } = await axios.get(
+      process.env.DOMAIN_URL + '/.netlify/edge-functions/get_country',
+    );
+    return { props: data.country, status: 200 };
   } catch (error) {
     console.log(error.toString());
     return {
