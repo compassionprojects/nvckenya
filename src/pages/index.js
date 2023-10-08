@@ -15,9 +15,12 @@ import RegistrationForm from '../components/RegistrationForm';
 
 export async function getServerData({ headers }) {
   try {
-    const { data } = await axios.get('/api/get_country', {
-      headers: Object.fromEntries(headers),
-    });
+    const { data } = await axios.get(
+      process.env.DOMAIN_HOST + '/api/get_country',
+      {
+        headers: Object.fromEntries(headers),
+      },
+    );
     return { props: data, status: 200 };
   } catch (error) {
     console.log(error.toString());
