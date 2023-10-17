@@ -249,7 +249,7 @@ tiers:
 sliding_scale:
   intro: If the above local tuition fee is more than you can contribute please use
     the sliding scale below to choose a price you can afford
-  min: "100"
+  min: "50"
   max: "500"
   step: "10"
 scholarship_info: >
