@@ -10,7 +10,7 @@ export default function Footer() {
         href="https://github.com/compassionprojects/nvckenya"
         target="_blank"
         rel="noreferrer">
-        Source code
+        Source
       </a>
     </footer>
   );
