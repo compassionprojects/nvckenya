@@ -5,10 +5,12 @@ import { Alert, Button, Input, InputGroup, InputGroupText } from 'reactstrap';
 export default function Donate() {
   const [value, setValue] = useState(5);
   const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     if (error) setError(null);
+    setSubmitting(true);
 
     try {
       const { data } = await axios.post('/api/create_payment', { value });
@@ -16,6 +18,7 @@ export default function Donate() {
     } catch (error) {
       console.log(error);
       setError('Creating your donation failed');
+      setSubmitting(false);
     }
   };
 
@@ -51,7 +54,9 @@ export default function Donate() {
           </div>
 
           <div className="mb-5 mt-5 text-center">
-            <Button color="primary">Donate</Button>
+            <Button color="primary" disabled={submitting}>
+              Donate
+            </Button>
           </div>
 
           {error && (
