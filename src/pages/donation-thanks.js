@@ -7,6 +7,12 @@ export default function Donated() {
         <h1 className="text-center">Thank you</h1>
         <div className="my-4 text-center">
           <p>Thank you for donating! We really appreciate your support.</p>
+
+          <div className="my-4">
+            <a href="/" className="btn btn-primary">
+              Back to home
+            </a>
+          </div>
         </div>
       </div>
     </div>
