@@ -153,7 +153,7 @@ export default function Home({ data }) {
             </strong>
           </div>
           <div className="mb-5 mt-3">
-            <Register /> &nbsp; <a href="/donate">Donate</a>
+            <Register />
           </div>
         </div>
         <div style={{ maxHeight: '30vh' }}>
