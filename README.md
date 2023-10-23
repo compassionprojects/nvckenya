@@ -4,6 +4,16 @@
 
 Developed using [gatsby](https://www.gatsbyjs.com/) and [staticcms](https://www.staticcms.org/).
 
+## Install
+
+```sh
+npm i
+cp .env.example .env.development # replace the env variables with correct values
+npm run dev
+```
+
+Open localhost:8000
+
 ---
 
 <p align="center">
@@ -15,7 +25,7 @@ Developed using [gatsby](https://www.gatsbyjs.com/) and [staticcms](https://www.
   Gatsby Minimal Starter
 </h1>
 
-## 🚀 Quick start
+#### 🚀 Quick start
 
 1.  **Create a Gatsby site.**
 
@@ -50,7 +60,7 @@ Developed using [gatsby](https://www.gatsbyjs.com/) and [staticcms](https://www.
     - [Plugin Library](https://www.gatsbyjs.com/plugins?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
     - [Cheat Sheet](https://www.gatsbyjs.com/docs/cheat-sheet/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
 
-## 🚀 Quick start (Netlify)
+#### 🚀 Quick start (Netlify)
 
 Deploy this starter with one click on [Netlify](https://app.netlify.com/signup):
 
