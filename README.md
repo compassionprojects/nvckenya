@@ -21,9 +21,9 @@ Open localhost:8000
     <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
   </a>
 </p>
-<h1 align="center">
+<h4 align="center">
   Gatsby Minimal Starter
-</h1>
+</h4>
 
 #### 🚀 Quick start
 
