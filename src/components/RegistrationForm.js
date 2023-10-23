@@ -29,7 +29,7 @@ const FORM_NAME = 'registration';
 const DEFAULT_PAYMENT_METHOD = 'mollie';
 
 const payment_methods = [
-  { name: 'Credit or debit card', method: DEFAULT_PAYMENT_METHOD },
+  { name: 'Credit card', method: DEFAULT_PAYMENT_METHOD },
   { name: 'Direct Bank transfer', method: 'bank_transfer' },
   { name: 'Mobile money transfer (Mpesa)', method: 'mobile_money_transfer' },
 ];
@@ -429,14 +429,10 @@ export default function RegistrationForm({
                       placeholder="Payment method"
                       as="select"
                       name="payment_method"
+                      required={true}
                       className="form-control">
                       {payment_methods.map((t) => (
-                        <option
-                          value={t.method}
-                          key={t.method}
-                          disabled={
-                            t.method === DEFAULT_PAYMENT_METHOD && 'disabled'
-                          }>
+                        <option value={t.method} key={t.method}>
                           {t.name}
                         </option>
                       ))}
