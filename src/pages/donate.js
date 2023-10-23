@@ -37,6 +37,12 @@ export default function Donate() {
         </div>
 
         <form onSubmit={onSubmit}>
+          {error && (
+            <Alert color="danger" className="mt-4">
+              {error}
+            </Alert>
+          )}
+
           <div className="col-md-5 col-sm-8 mx-auto">
             <InputGroup>
               <InputGroupText>€</InputGroupText>
@@ -58,12 +64,6 @@ export default function Donate() {
               Donate
             </Button>
           </div>
-
-          {error && (
-            <Alert color="danger" className="mt-4">
-              {error}
-            </Alert>
-          )}
         </form>
       </div>
     </div>
