@@ -67,17 +67,17 @@ program:
     **1. Tuition (EURO):**
 
 
-    - _€ 1.699 if registered before 25. October 2023_ **(Early bird)**
+    - _€ 1.699 if registered before 30. October 2023_ **(Early bird)**
 
-    - _€ 2.000 if registered after 25. October 2023_ **(Standard)**
+    - _€ 2.000 if registered after 30. October 2023_ **(Standard)**
 
 
     We offer a local adjusted tuition fee of:
 
 
-    - _€ 500 if registered before 25. October 2023_ (**Early bird**)
+    - _€ 500 if registered before 30. October 2023_ (**Early bird**)
 
-    - _€ 600 if registered after 25. October 2023_ (**Standard**)
+    - _€ 600 if registered after 30. October 2023_ (**Standard**)
 
 
     If the above local tuition fee is more than you can contribute please choose a price on the sliding scale between €50 - €500. If this is still too much, you are able to request for scholarship (which you will see in the registration form)
@@ -125,9 +125,9 @@ program:
     **B. If** ***you*** **cancel:**
 
 
-    - Through 31-Oct-2023, you will: Receive a refund minus a non-refundable €150 tuition deposit
+    - Through 6-Nov-2023, you will: Receive a refund minus a non-refundable €150 tuition deposit
 
-    - Between 1-Nov-2023 and 24-Nov-2023, you will: Receive a 50% refund (we retain 50%).
+    - Between 7-Nov-2023 and 24-Nov-2023, you will: Receive a 50% refund (we retain 50%).
 
 
     Beginning 25-Nov-2023 no refunds or transfers are available. We suggest you take an insurance in case you can't attend the training.
@@ -249,13 +249,13 @@ tiers:
     title: Early bird
     price: "1699"
     start_date: 2023-10-02
-    end_date: 2023-10-25
+    end_date: 2023-10-30
     parity_price: "500"
     price_accommodation: "380"
   - title: Standard
     date: 2023-12-01
     price: "2000"
-    start_date: 2023-10-26
+    start_date: 2023-10-31
     end_date: 2023-12-01
     parity_price: "600"
     price_accommodation: "380"
