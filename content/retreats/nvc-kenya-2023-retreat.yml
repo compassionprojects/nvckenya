@@ -237,9 +237,9 @@ seo:
   seo_title: Kenyan NVC Retreat | 1st - 10th December 2023, Nairobi
   seo_image: nvckenya_hero_image2.jpg
 registration:
-  text: "Fill in the form, make the payment and we will send you a confirmation to
-    your email. We will send you another form after the payment to better
-    understand and serve you during the retreat. "
+  text: Fill in the form, make the payment and we will send you a confirmation to
+    your email. Once you finish registering, please fill in the questionnaire
+    which will help us in serving you better during the retreat.
   terms_url: https://docs.google.com/document/d/1F420RQNovXq86vrdj30HHp5lmChHdygfypiIm-0dSkk/edit?usp=sharing
 currency:
   short_name: EUR
