@@ -67,17 +67,17 @@ program:
     **1. Tuition (EURO):**
 
 
-    - _€ 1.699 if registered before 25. October 2023_ **(Early bird)**
+    - _€ 1.699 if registered before 30. October 2023_ **(Early bird)**
 
-    - _€ 2.000 if registered after 25. October 2023_ **(Standard)**
+    - _€ 2.000 if registered after 30. October 2023_ **(Standard)**
 
 
     We offer a local adjusted tuition fee of:
 
 
-    - _€ 500 if registered before 25. October 2023_ (**Early bird**)
+    - _€ 500 if registered before 30. October 2023_ (**Early bird**)
 
-    - _€ 600 if registered after 25. October 2023_ (**Standard**)
+    - _€ 600 if registered after 30. October 2023_ (**Standard**)
 
 
     If the above local tuition fee is more than you can contribute please choose a price on the sliding scale between €50 - €500.
@@ -249,13 +249,13 @@ tiers:
     title: Early bird
     price: "1699"
     start_date: 2023-10-02
-    end_date: 2023-10-25
+    end_date: 2023-10-30
     parity_price: "500"
     price_accommodation: "380"
   - title: Standard
     date: 2023-12-01
     price: "2000"
-    start_date: 2023-10-26
+    start_date: 2023-10-31
     end_date: 2023-12-01
     parity_price: "600"
     price_accommodation: "380"
