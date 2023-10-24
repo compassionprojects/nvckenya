@@ -5,7 +5,7 @@ const host = process.env.DOMAIN_HOST;
 const CURRENCY = 'EUR';
 
 export default async function handler(req, res) {
-  const { value } = req.body;
+  const { value, metadata } = req.body;
 
   const redirectUrl = `${host}/donation-thanks`;
   const description = 'Donation for NVC Kenya 2023 scholarship funds';
@@ -17,6 +17,7 @@ export default async function handler(req, res) {
   try {
     const payment = await mollieClient.payments.create({
       amount,
+      metadata,
       description,
       redirectUrl,
     });

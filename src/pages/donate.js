@@ -1,10 +1,20 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Alert, Button, Input, InputGroup, InputGroupText } from 'reactstrap';
+import {
+  Alert,
+  Button,
+  Input,
+  InputGroup,
+  InputGroupText,
+  FormGroup,
+  Label,
+} from 'reactstrap';
 
 export default function Donate() {
-  const [value, setValue] = useState(5);
+  const [value, setValue] = useState(50);
   const [error, setError] = useState(null);
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = async (e) => {
@@ -13,7 +23,10 @@ export default function Donate() {
     setSubmitting(true);
 
     try {
-      const { data } = await axios.post('/api/create_payment', { value });
+      const { data } = await axios.post('/api/create_payment', {
+        value,
+        metadata: { email, name },
+      });
       window.location = data.paymentUrl.href;
     } catch (error) {
       console.log(error);
@@ -36,27 +49,63 @@ export default function Donate() {
           </p>
         </div>
 
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} className="col-md-6 col-sm-8 mx-auto">
           {error && (
             <Alert color="danger" className="mt-4">
               {error}
             </Alert>
           )}
 
-          <div className="col-md-5 col-sm-8 mx-auto">
-            <InputGroup>
-              <InputGroupText>€</InputGroupText>
+          <div className="col-12">
+            <FormGroup>
+              <Label for="name">
+                Name <span className="text-body-tertiary">(optional)</span>
+              </Label>
               <Input
-                placeholder="Enter an amount"
-                name="donation_amount"
-                type="number"
-                min={1}
-                required={true}
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                className="form-control money"
+                placeholder="Your name"
+                type="text"
+                name="name"
+                id="name"
+                className="form-control"
+                onChange={(e) => setName(e.target.value)}
               />
-            </InputGroup>
+            </FormGroup>
+          </div>
+
+          <div className="col-12">
+            <FormGroup>
+              <Label for="email">
+                Email <span className="text-body-tertiary">(optional)</span>
+              </Label>
+              <Input
+                placeholder="Your email address"
+                type="email"
+                name="email"
+                id="email"
+                className="form-control"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </FormGroup>
+          </div>
+
+          <div className="col-12">
+            <FormGroup>
+              <Label for="donation_amount">Donation amount</Label>
+              <InputGroup>
+                <InputGroupText>€</InputGroupText>
+                <Input
+                  placeholder="Enter an amount"
+                  name="donation_amount"
+                  id="donation_amount"
+                  type="number"
+                  min={1}
+                  required={true}
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                  className="form-control money"
+                />
+              </InputGroup>
+            </FormGroup>
           </div>
 
           <div className="mb-5 mt-5 text-center">
