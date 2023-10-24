@@ -109,7 +109,7 @@ export default function Donate() {
           </div>
 
           <div className="mb-5 mt-5 text-center">
-            <Button color="primary" disabled={submitting}>
+            <Button color="primary" size="lg" disabled={submitting}>
               Donate
             </Button>
           </div>
