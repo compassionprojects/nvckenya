@@ -3,12 +3,30 @@ import PropTypes from 'prop-types';
 import { graphql } from 'gatsby';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 import classnames from 'classnames';
-import marked from '../lib/marked';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import axios from 'axios';
+// import requestIp from 'request-ip';
 import format from 'date-fns/format';
+import marked from '../lib/marked';
 
 import Nav from '../components/Nav';
 import RegistrationForm from '../components/RegistrationForm';
+
+// @todo may be rename DOMAIN_HOST to BASE_URL
+
+export async function getServerData() {
+  try {
+    const { data } = await axios.get(
+      process.env.DOMAIN_HOST + '/api/get_country',
+    );
+    return { props: data.country, status: 200 };
+  } catch (error) {
+    console.log(error.toString());
+    return {
+      props: { country: '', status: 200 },
+    };
+  }
+}
 
 // get the latest retreat by sorting latest
 export const query = graphql`
@@ -106,7 +124,7 @@ export const query = graphql`
   }
 `;
 
-export default function Home({ data }) {
+export default function Home({ data, serverData }) {
   // display the latest retreat
   const {
     title,
@@ -352,6 +370,7 @@ export default function Home({ data }) {
               currency={currency}
               contact_email={contact_email}
               registration_info={marked(registration.text)}
+              country={serverData.country}
             />
           </div>
         </Section>
@@ -362,6 +381,7 @@ export default function Home({ data }) {
 
 Home.propTypes = {
   data: PropTypes.object,
+  serverData: PropTypes.object,
 };
 
 /* eslint-disable */
