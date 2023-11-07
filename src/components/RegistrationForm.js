@@ -80,7 +80,6 @@ export default function RegistrationForm({
   onSubmit,
   tiers,
   sliding_scale,
-  scholarship_info,
   payment_options,
   currency,
   contact_email,
@@ -408,12 +407,10 @@ export default function RegistrationForm({
                         I need support with a scholarship
                       </Label>
                       {need_scholarship && (
-                        <div
-                          className="my-1"
-                          dangerouslySetInnerHTML={{
-                            __html: scholarship_info,
-                          }}
-                        />
+                        <div className="my-1">
+                          Please complete registration, we will show you how to
+                          request for a scholarship
+                        </div>
                       )}
                     </FormGroup>
                   </div>
