@@ -407,9 +407,9 @@ export default function RegistrationForm({
                         I need support with a scholarship
                       </Label>
                       {need_scholarship && (
-                        <div className="my-1">
-                          Please complete registration, we will show you how to
-                          request for a scholarship
+                        <div className="mb-2 text-body-tertiary">
+                          Please complete the registration, we will show you how
+                          to request for a scholarship.
                         </div>
                       )}
                     </FormGroup>
