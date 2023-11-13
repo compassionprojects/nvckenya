@@ -54,6 +54,12 @@ let paymentSchema = object({
   payment_method: string()
     .oneOf(payment_methods.map((t) => t.method))
     .optional(),
+  employer_pays: boolean().optional(),
+  employer_email: string()
+    .email()
+    .when('$employer_pays', ([employer_pays], schema) =>
+      employer_pays ? schema.required() : schema.optional(),
+    ),
 });
 
 const initialValues = {
@@ -72,6 +78,8 @@ const initialValues = {
   need_accommodation: false,
   price_slided: 0,
   donation_amount: 5,
+  employer_email: '',
+  employer_pays: false,
 };
 
 export default function RegistrationForm({
@@ -133,7 +141,7 @@ export default function RegistrationForm({
     const shouldPayNow =
       ((isAfricanCountry && values.payment_method === DEFAULT_PAYMENT_METHOD) ||
         !isAfricanCountry) &&
-      !values.need_scholarship;
+      !(values.need_scholarship || values.employer_pays);
     // skip for development or if last name is testing
     const canSaveToNetlify =
       process.env.NODE_ENV !== 'development' &&
@@ -228,6 +236,7 @@ export default function RegistrationForm({
             payment_method,
             need_scholarship,
             price_slided,
+            employer_pays,
           },
         }) => (
           <Form
@@ -331,6 +340,8 @@ export default function RegistrationForm({
 
                     setFieldValue('cannot_pay', false);
                     setFieldValue('need_scholarship', false);
+                    setFieldValue('employer_pays', false);
+                    setFieldValue('employer_email', '');
                     if (isAfrica(code)) {
                       setFieldValue('price_slided', sliding_scale.max);
                     } else {
@@ -395,25 +406,56 @@ export default function RegistrationForm({
                   </div>
                 )}
                 {cannot_pay && (
-                  <div className="col-12">
-                    <FormGroup check>
-                      <Field
-                        type="checkbox"
-                        name="need_scholarship"
-                        id="need_scholarship"
-                        className="form-check-input"
-                      />{' '}
-                      <Label for="need_scholarship">
-                        I need support with a scholarship
-                      </Label>
-                      {need_scholarship && (
-                        <div className="mb-2 text-body-tertiary">
-                          Please complete the registration, we will show you how
-                          to request for a scholarship.
-                        </div>
-                      )}
-                    </FormGroup>
-                  </div>
+                  <>
+                    <div className="col-12">
+                      <FormGroup check>
+                        <Field
+                          type="checkbox"
+                          name="need_scholarship"
+                          id="need_scholarship"
+                          className="form-check-input"
+                        />{' '}
+                        <Label for="need_scholarship">
+                          I need support with a scholarship
+                        </Label>
+                        {need_scholarship && (
+                          <div className="mb-2 text-body-tertiary">
+                            Please complete the registration, we will show you
+                            how to request for a scholarship.
+                          </div>
+                        )}
+                      </FormGroup>
+                    </div>
+                    <div className="col-12">
+                      <FormGroup check>
+                        <Field
+                          type="checkbox"
+                          name="employer_pays"
+                          id="employer_pays"
+                          className="form-check-input"
+                        />{' '}
+                        <Label for="employer_pays">
+                          My employer is supporting me financially
+                        </Label>
+                        {employer_pays && (
+                          <div className="col-7 mb-2">
+                            <FormGroup>
+                              <Field
+                                placeholder="Enter the email of your employer"
+                                name="employer_email"
+                                type="email"
+                                className={classnames('form-control', {
+                                  'is-invalid':
+                                    errors.employer_email &&
+                                    touched.employer_email,
+                                })}
+                              />
+                            </FormGroup>
+                          </div>
+                        )}
+                      </FormGroup>
+                    </div>
+                  </>
                 )}
               </FormGroup>
             </div>
@@ -509,7 +551,7 @@ export default function RegistrationForm({
               </FormGroup>
             </div>
 
-            {!need_scholarship && (
+            {!(need_scholarship || employer_pays) && (
               <TotalPayable activeTier={activeTier} currency={currency} />
             )}
 
@@ -523,7 +565,7 @@ export default function RegistrationForm({
                 Register
               </Button>
               {payment_method === DEFAULT_PAYMENT_METHOD &&
-                !need_scholarship && (
+                !(need_scholarship || employer_pays) && (
                   <div className="mt-2 small text-body-tertiary text-center">
                     You will be redirected to make payment
                   </div>
@@ -712,10 +754,14 @@ function FieldCannotPay() {
   const {
     values: { cannot_pay },
     setFieldValue,
+    setFieldTouched,
   } = useFormikContext();
 
   useEffect(() => {
     setFieldValue('need_scholarship', false);
+    setFieldValue('employer_pays', false);
+    setFieldValue('employer_email', '');
+    setFieldTouched('employer_email', false);
   }, [cannot_pay]);
 
   return (
