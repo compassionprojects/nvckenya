@@ -16,6 +16,7 @@ export const query = graphql`
             bank_transfer
             mobile_money_transfer
           }
+          employer_support_info
         }
       }
     }
