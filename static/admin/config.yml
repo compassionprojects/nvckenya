@@ -201,6 +201,9 @@ collections:
       - name: confirmation_message
         label: Thank you message
         widget: markdown
+      - name: employer_support_info
+        label: Employer support info
+        widget: markdown
 
   - name: team
     label: Team
