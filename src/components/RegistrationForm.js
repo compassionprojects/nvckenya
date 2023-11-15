@@ -146,7 +146,7 @@ export default function RegistrationForm({
     const canSaveToNetlify =
       process.env.NODE_ENV !== 'development' &&
       !values.last_name.toLowerCase().includes('testing');
-    const confirmationUrl = `/confirmation?need_scholarship=${values.need_scholarship}&payment_method=${values.payment_method}`;
+    const confirmationUrl = `/confirmation?need_scholarship=${values.need_scholarship}&payment_method=${values.payment_method}&employer_pays=${values.employer_pays}`;
     let paymentUrl;
 
     // create order in Mollie and get the payment url
@@ -438,8 +438,8 @@ export default function RegistrationForm({
                           My employer is supporting me financially
                         </Label>
                         {employer_pays && (
-                          <div className="col-7 mb-2">
-                            <FormGroup>
+                          <>
+                            <div className="col-7 mb-2">
                               <Field
                                 placeholder="Enter the email of your employer"
                                 name="employer_email"
@@ -450,8 +450,12 @@ export default function RegistrationForm({
                                     touched.employer_email,
                                 })}
                               />
-                            </FormGroup>
-                          </div>
+                            </div>
+                            <div className="mb-2 text-body-tertiary">
+                              One of our organisers will get in touch with your
+                              employer.
+                            </div>
+                          </>
                         )}
                       </FormGroup>
                     </div>

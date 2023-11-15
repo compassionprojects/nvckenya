@@ -29,15 +29,18 @@ export default function Confirmation({ data }) {
     contact_email,
     confirmation_message,
     payment_options,
+    employer_support_info,
   } = data.allRetreatsYaml.edges[0].node;
   const [needScholarship, setNeedScholarship] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState();
+  const [employerPays, setEmployerPays] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     setNeedScholarship(params.get('need_scholarship') === 'true');
     setPaymentMethod(params.get('payment_method'));
-  }, [needScholarship, paymentMethod]);
+    setEmployerPays(params.get('employer_pays'));
+  }, [needScholarship, paymentMethod, employerPays]);
 
   return (
     <div className="px-2 py-5 mt-5 border-bottom">
@@ -62,6 +65,17 @@ export default function Confirmation({ data }) {
             <div className="my-2 respect-newlines">
               {payment_options[paymentMethod]}
             </div>
+          </div>
+        )}
+        {employerPays && (
+          <div>
+            <strong>Employer support</strong>
+            <div
+              className="my-2"
+              dangerouslySetInnerHTML={{
+                __html: marked(employer_support_info),
+              }}
+            />
           </div>
         )}
         <div className="mb-5 mt-3 text-center">
